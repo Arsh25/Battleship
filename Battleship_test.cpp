@@ -1,9 +1,7 @@
-// fa2_test.cpp
-// Glenn G. Chappell
-// 12 Feb 2016
+// Battleship_test.cpp
 //
 // For CS 372 Spring 2016
-// Unit tests for Assignment 2, Exercises A, B, C
+// Unit tests for Battleship Project
 // Uses the "Catch" C++ Unit-Testing Framework
 
 #define CATCH_CONFIG_MAIN  // We want Catch to write function main
@@ -24,23 +22,26 @@ using namespace std::placeholders;
 // For _1, used with std::bind
 
 
-// ***** Helper Functions ****
-
-
-
 
 
 // ***** Test Cases *****
 
 
-TEST_CASE("Exercise A: Returned vectors have correct size", "[ex a]")
+TEST_CASE("Board Class Testing", "[ex a]")
 {
 	Board test;
-	
 	
 	REQUIRE(test.getSize() == 1000);
 
 }
 
+
+TEST_CASE("GUI Set-up Tests", "[ex b]")
+{
+	REQUIRE(gui_Include);
+	REQUIRE(gui_Init);
+	REQUIRE(gui_Board);
+
+}
 
 
