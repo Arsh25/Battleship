@@ -18,13 +18,22 @@ class Board
 {
 public:
 	bool isOccupied();
+	bool isPrimary();
 	int getSize();
 	void setSize(int size);
 
 
+
 private:
-	int boardSize;
-	bool squareOccupied;
+	int boardSize_;
+	bool squareOccupied_;
+	bool isPrimary_;
+
+public:
+
+//-----------------Constructors----------------------\\
+
+Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary){}
 
 };
 
@@ -33,13 +42,18 @@ private:
 
 int Board::getSize()
 {
-	return 0;
+	return boardSize_;
 	
 }
 
 void Board::setSize(int size)
 {
-	
+	boardSize_ = size;
+}
+
+bool Board::isPrimary()
+{
+	return isPrimary_;
 }
 
 #endif
