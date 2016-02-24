@@ -76,10 +76,10 @@ double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 void GridDraw(); //Drawing function for the board.
 void Labeler();
 
-Board player1Home;
-Board player1Target;
-Board player2Home;
-Board player2Target;
+Board player1Home(10,true);
+Board player1Target(10,false);
+Board player2Home(10,true);
+Board player2Target(10,false);
 
 
 
