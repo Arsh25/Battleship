@@ -27,11 +27,17 @@ using namespace std::placeholders;
 // ***** Test Cases *****
 
 
-TEST_CASE("Board Class Testing", "[ex a]")
+TEST_CASE("2 param  Constructor", "[Board]")
 {
-	Board test;
-	
-	REQUIRE(test.getSize() == 1000);
+	Board primary(10,true);
+
+	REQUIRE(primary.getSize() == 10);
+	REQUIRE(primary.isPrimary() == true);
+
+	Board target(10,false); //Testing Target board construction
+	REQUIRE(target.getSize() == 10);
+	REQUIRE(target.isPrimary() == false);
+
 
 }
 
