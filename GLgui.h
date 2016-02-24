@@ -22,6 +22,7 @@ using std::exit;
 #include "lib381/bitmapprinter.h"
 #include "Board.h"
 
+
 // For class BitmapPrinter
 #include <sstream>
 using std::ostringstream;
@@ -55,7 +56,7 @@ bool gui_Board = false;
 const int ESCKEY = 27;         // ASCII value of Escape
 
 // Window/viewport
-const int startwinwd = 800;    // Window width, height (pixels)
+const int startwinwd = 1200;    // Window width, height (pixels)
 const int startwinht = 800;
 const int startwinposx = 100;   // Window top-left corner x, y (pixels)
 const int startwinposy = 25;
@@ -75,6 +76,11 @@ double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 void GridDraw(); //Drawing function for the board.
 void Labeler();
 
+Board player1Home;
+Board player1Target;
+Board player2Home;
+Board player2Target;
+
 
 
 //-----------Misc Variables---------------
@@ -83,7 +89,10 @@ double savetime;    // Time of previous movement (sec)
 
 
 
+bool p1turn = true;
+bool p2turn = false;
 bool showdisplay = true; //shows the text display
+bool finbuttonhover = false; //if mouse is over the finished button
 
 
 //-----------------Mouse Based Variables----------------
@@ -110,6 +119,63 @@ void drawSquare()
 
 }
 
+// Draws a outlined square, using current GL states,
+//  in the x,y plane, centered at the origin, aligned w/ x,y axes,
+void drawEmpSquare()
+{
+	glBegin(GL_LINES);
+	glColor3d(0.0, 0.0, 0.0);
+
+	glVertex2d(-1., -1.);
+	glVertex2d(1., -1.);
+
+	glVertex2d(1., -1.);
+	glVertex2d(1., 1.);
+
+	glVertex2d(1., 1.);
+	glVertex2d(-1., 1.);
+
+	glVertex2d(-1., 1.);
+	glVertex2d(-1., -1.);
+
+	glEnd();
+}
+
+// drawCircle
+// Draws a filled Circle
+void drawCirc()
+{
+	glBegin(GL_POLYGON);
+	for (int i = 0; i <= 300; i++) {
+		double angle = 2 * 3.14 * i / 300;
+		double x = cos(angle);
+		double y = sin(angle);
+		glVertex2d(x, y);
+	}
+	glEnd();
+}
+
+//drawHome1
+//draws the home grid for player 1 
+void drawHome1()
+{
+	
+	for (int i = 0; i < player1Home.getSize(); i++)
+	{
+		for (int j = 0; j < player1Home.getSize(); j++)
+		{
+			glPushMatrix();
+			glTranslated(-0.875 + (0.2*i), 0.875 - (0.2*j), 0.0);
+			glScaled(0.1, 0.1, 0.0);
+			drawEmpSquare();
+			glPopMatrix();
+		}
+	}
+
+	
+
+}
+
 
 
 //---------------Display, Idle, Reshape Functions-----------------\\
@@ -120,9 +186,33 @@ void myDisplay()
 {
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	BitmapPrinter p(-0.9, 0.9, 0.1);
 
 	// Initial transformation
 	glLoadIdentity();
+
+	glColor3d(0.4, 0.4, 0.4);
+
+	//player1Home Grid
+	glPushMatrix();
+	glTranslated(0.45,-0.2,0.0);
+	glScaled(0.75, 1.0, 0.0); //0.75 used for screen scale
+	drawHome1();
+	glPopMatrix();
+
+
+
+	//'Finished' Button
+	glPushMatrix();
+	glColor3d(0.2, 0.7, 0.4);
+	glTranslated(-0.75, 0.0, 0.0);
+	glScaled(0.15*0.75, 0.15, 0.0);
+	drawCirc();
+
+	glColor3d(0., 0., 0.); // Black text
+	glTranslated(0.5*.75, -1.0, 0.0);
+	p.print("Finished!");
+	glPopMatrix();
 
 
 	//Instruction Text
@@ -131,11 +221,17 @@ void myDisplay()
 	glLoadIdentity();
 
 	glColor3d(0., 0., 0.);        // Black text
-	BitmapPrinter p(-0.9, 0.9, 0.1);
+
+	//glTranslated(0.0, -0.5, 0.0); //modify to change text position
 	if (showdisplay == true)
 	{
-		p.print("Battleship Game Gui v0.1");
-		p.print("press esc to exit");
+		p.print("Welcome to Battleship");
+		p.print("Please use the mouse to place ships");
+		p.print("on the board by clicking a grid square,");
+		p.print("then choosing a direction. Click the");
+		p.print("'finished' button when you are done to ");
+		p.print("pass it to the next player.");
+
 
 	}
 	glPopMatrix();                // Restore prev projection
@@ -164,7 +260,7 @@ void myIdle()
 	if (elapsedtime > 0.1)
 		elapsedtime = 0.1;
 
-
+	//glutPostRedisplay();
 }
 
 // myReshape
@@ -266,6 +362,13 @@ void myMotion(int x, int y)
 	// Find mouse pos in cam coords (saved in cam_mousex, cam_mousey)
 	saveMouse(x, y);
 
+	if (cam_mousex >= 0.0
+		&& cam_mousex <= 0.0
+		&& cam_mousey >= 0.0
+		&& cam_mousey <= 0.0)
+	{
+
+	}
 
 
 	glutPostRedisplay();
