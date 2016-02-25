@@ -62,3 +62,14 @@ void Cell::setBounds(float topBound, float bottomBound, float leftBound, float r
 	leftBound_ = leftBound;
 	rightBound_ = rightBound;
 }
+
+void Cell::setSquareHover(bool mouseOver)
+{
+	squareHover_ = mouseOver;
+
+}
+
+bool Cell::getSquareHover()
+{
+	return squareHover_;
+}
