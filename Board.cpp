@@ -26,28 +26,26 @@ bool Board::isPrimary()
 
 int Board::totalCells()
 {
-	return board_.size();
+	return totalCells_;
 	
 }
 
-void Board::setHead(int cell)
+void Board::setHead(int row, int column)
 {
-	//board_[cell].setHead();
+	board_[row][column].setHead();
 }
 
-void Board::setOccupied(int cell)
+void Board::setOccupied(int row, int column)
 {
-	//board_[10].setOccupied();
+	board_[row][column].setOccupied();
 }
 
-bool Board::isHead(int cell)
+bool Board::isHead(int row, int column)
 {
-	//return board_[10].isHead();
-	return false;
+	return board_[row][column].isHead();
 }
 
-bool Board::isOccupied(int cell)
+bool Board::isOccupied(int row, int column)
 {
-	//return board_[10].isOccupied();
-	return false;
+	return board_[row][column].isOccupied();
 }

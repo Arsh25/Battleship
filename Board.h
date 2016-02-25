@@ -24,14 +24,15 @@ public:
 
 //--------functions to act on our board's cells--------//
 	int totalCells();
-	void setHead(int);
-	void setOccupied(int); 
-	bool isHead(int);
-	bool isOccupied(int);
+	void setHead(int,int);
+	void setOccupied(int,int); 
+	bool isHead(int,int);
+	bool isOccupied(int,int);
 
 	vector<vector<Cell>> board_;
 private:
 	int boardSize_;
+	int totalCells_;
 	bool squareOccupied_;
 	bool isPrimary_;
 	//vector<Cell> board_; // Represents the individual cells 
@@ -41,7 +42,7 @@ public:
 
 //-----------------Constructors----------------------//
 
-Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary)
+Board (int size, bool isPrimary):boardSize_(size),totalCells_(size*size),isPrimary_(isPrimary)
 {  
 	board_.resize(boardSize_); 
 	for (int i = 0; i < boardSize_; i++)
