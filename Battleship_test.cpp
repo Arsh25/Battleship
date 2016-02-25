@@ -54,10 +54,10 @@ TEST_CASE(" Testing manipulating cells from board","[BOARD]")
 	
 	REQUIRE(cellTest.isPrimary() == true);
 	REQUIRE(cellTest.totalCells() == CELLS);
-	cellTest.setHead(10);
-	REQUIRE(cellTest.isHead(10) == true);
-	cellTest.setOccupied(10);
-	REQUIRE(cellTest.isOccupied(10) == true);
+	cellTest.setHead(9,9);
+	REQUIRE(cellTest.isHead(9,9) == true);
+	cellTest.setOccupied(9,4);
+	REQUIRE(cellTest.isOccupied(9,4) == true);
 
 }
 
