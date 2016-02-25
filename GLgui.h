@@ -191,7 +191,7 @@ void drawHome1()
 			glScaled(0.1, 0.1, 0.0);
 			drawEmpSquare();
 
-			if (player1Home.board_[i][j].squarehover == true)
+			if (player1Home.board_[i][j].getSquareHover() == true)
 			{
 				glColor3d(0.8, 0.8, 0.0);
 				drawSquare();
@@ -491,12 +491,12 @@ void myPassiveMotion(int x, int y)
 				&& cam_mousey >= std::get<0> (cellBounds)
 				&& cam_mousey <= std::get<1> (cellBounds))
 			{
-				player1Home.board_[i][j].squarehover = true;
+				player1Home.board_[i][j].setSquareHover(true);
 
 			}
 			else
 			{
-				player1Home.board_[i][j].squarehover = false;
+				player1Home.board_[i][j].setSquareHover(false);
 			}
 		}
 	}
