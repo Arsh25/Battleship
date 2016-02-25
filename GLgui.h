@@ -37,7 +37,8 @@ using std::fixed;
 using std::setprecision;
 #include <vector>
 using std::vector;
-
+#include <tuple>
+using std::tuple;
 
 //-------------Initial Gui set-up variable for test case----------
 
@@ -203,10 +204,11 @@ void drawHome1()
 
 			//This needs to be fixed to take into account the linethickness
 			//between each square.
-			player1Home.board_[i][j].leftbound = x - 0.075 + gridstartx ;
-			player1Home.board_[i][j].rightbound = x + 0.075 + gridstartx ;
-			player1Home.board_[i][j].topbound = -y + 0.075 + gridstarty ;
-			player1Home.board_[i][j].bottombound = -y - 0.075 + gridstarty ;
+			float leftBound = x - 0.075 + gridstartx ;
+			float rightBound = x + 0.075 + gridstartx ;
+			float topBound = -y + 0.075 + gridstarty ;
+			float bottomBound = -y - 0.075 + gridstarty ;
+			player1Home.board_[i][j].setBounds(topBound,bottomBound,leftBound,rightBound); 
 			glPopMatrix();
 
 			
@@ -483,10 +485,11 @@ void myPassiveMotion(int x, int y)
 	{
 		for (int j = 0; j < player1Home.getSize(); j++)
 		{
-			if (cam_mousex >= player1Home.board_[i][j].leftbound
-				&& cam_mousex <= player1Home.board_[i][j].rightbound
-				&& cam_mousey >= player1Home.board_[i][j].bottombound
-				&& cam_mousey <= player1Home.board_[i][j].topbound)
+			tuple<float,float,float,float> cellBounds = player1Home.board_[i][j].getBounds();
+			if (cam_mousex >= std::get<2> (cellBounds)
+				&& cam_mousex <= std::get<3> (cellBounds)
+				&& cam_mousey >= std::get<0> (cellBounds)
+				&& cam_mousey <= std::get<1> (cellBounds))
 			{
 				player1Home.board_[i][j].squarehover = true;
 

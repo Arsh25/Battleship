@@ -6,6 +6,10 @@
 
 #include "Cell.h"
 
+#include <tuple>
+using std::tuple;
+using std::make_tuple;
+
 /*
 	isOccupied
 	Pre: None
@@ -44,4 +48,17 @@ void Cell::setOccupied()
 void Cell::setHead() 
 {
 	isHead_ = true;
+}
+
+tuple<float,float,float,float> Cell::getBounds()
+{
+	return make_tuple <float&,float&,float&,float&> (bottomBound_,topBound_,leftBound_,rightBound_);
+}
+
+void Cell::setBounds(float topBound, float bottomBound, float leftBound, float rightBound)
+{
+	topBound_ = topBound;
+	bottomBound_ = bottomBound;
+	leftBound_ = leftBound;
+	rightBound_ = rightBound;
 }
