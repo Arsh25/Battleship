@@ -42,12 +42,12 @@ private:
 public:
 //	Cell * board = new Cell[boardSize_][boardSize_];
 
-	vector<Cell> board;
+	vector<Cell> board_;
 
 
 //-----------------Constructors----------------------\\
 
-Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary){}
+Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary){  board_.resize(boardSize_); }
 
 };
 
