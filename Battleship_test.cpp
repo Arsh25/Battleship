@@ -73,12 +73,13 @@ TEST_CASE("Setting Cell Properties", "[CELL]")
 }
 
 
-TEST_CASE("GUI Set-up Tests", "[ex b]")
+TEST_CASE("GUI Set-up Tests", "[GUI]")
 {
 	REQUIRE(gui_Include);
 	REQUIRE(gui_Init);
 	REQUIRE(gui_Board);
 
 }
+
 
 
