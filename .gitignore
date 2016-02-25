@@ -1,0 +1,7 @@
+#ignore executables
+*.exe
+*.out
+battleship_test
+
+#Ignore catch generated main
+catch.cpp
