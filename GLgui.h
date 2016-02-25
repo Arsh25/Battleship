@@ -17,6 +17,7 @@ using std::exit;
 
 //For random double generator
 #include <random>
+#include <math.h>
 
 // Other includes
 #include "lib381/bitmapprinter.h"
@@ -76,11 +77,13 @@ double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 void GridDraw(); //Drawing function for the board.
 void Labeler();
 
-Board player1Home(10,true);
-Board player1Target(10,false);
-Board player2Home(10,true);
-Board player2Target(10,false);
+Board player1Home(10, true);
+Board player1Target(10, false);
+Board player2Home(10, true);
+Board player2Target(10, false);
 
+float gridstartx = -0.1;
+float gridstarty = 0.65;
 
 
 //-----------Misc Variables---------------
@@ -94,6 +97,17 @@ bool p2turn = false;
 bool showdisplay = true; //shows the text display
 bool finbuttonhover = false; //if mouse is over the finished button
 
+//variables for the 'finished' button
+float finish_x = -1.25;
+float finish_y = 0.0;
+
+
+float finishcol[3] = { 0.2, 0.7, 0.4 };
+float finish_base[3] = { 0.2,0.7,0.4 };
+float finish_hover[3] = { 0.5, 1.0, 0.7 };
+float finish_clicked[3] = { 0.1, 0.5, 0.2 };
+
+
 
 //-----------------Mouse Based Variables----------------
 
@@ -101,7 +115,6 @@ bool leftmousedown;     // true if left mouse button is down
 bool rightmousedown;
 
 double cam_mousex, cam_mousey; // Mouse pos in cam coords
-
 
 
 //-----------------Drawing Functions---------------
@@ -141,6 +154,7 @@ void drawEmpSquare()
 	glEnd();
 }
 
+
 // drawCircle
 // Draws a filled Circle
 void drawCirc()
@@ -150,8 +164,10 @@ void drawCirc()
 		double angle = 2 * 3.14 * i / 300;
 		double x = cos(angle);
 		double y = sin(angle);
+
 		glVertex2d(x, y);
 	}
+
 	glEnd();
 }
 
@@ -164,11 +180,37 @@ void drawHome1()
 	{
 		for (int j = 0; j < player1Home.getSize(); j++)
 		{
+
+			float x = (0.2*i);
+			float y = (0.2*j);
+
 			glPushMatrix();
-			glTranslated(-0.875 + (0.2*i), 0.875 - (0.2*j), 0.0);
+			glColor3d(0.4, 0.4, 0.4);
+			glTranslated(x, -y, 0.0);
 			glScaled(0.1, 0.1, 0.0);
 			drawEmpSquare();
+
+			if (player1Home.board_[i][j].squarehover == true)
+			{
+				glColor3d(0.8, 0.8, 0.0);
+				drawSquare();
+			}
+			
+			float linethickness = 0.0125;
+			float ax = 2 * (i + linethickness) * 0.1;
+			float ay = 2 * (j + linethickness) * 0.1;
+
+
+			//This needs to be fixed to take into account the linethickness
+			//between each square.
+			player1Home.board_[i][j].leftbound = x - 0.075 + gridstartx ;
+			player1Home.board_[i][j].rightbound = x + 0.075 + gridstartx ;
+			player1Home.board_[i][j].topbound = -y + 0.075 + gridstarty ;
+			player1Home.board_[i][j].bottombound = -y - 0.075 + gridstarty ;
 			glPopMatrix();
+
+			
+
 		}
 	}
 
@@ -186,31 +228,36 @@ void myDisplay()
 {
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	BitmapPrinter p(-0.9, 0.9, 0.1);
+	BitmapPrinter p(0.0, 0.0, 0.1);
 
-	// Initial transformation
+	
+
 	glLoadIdentity();
+
+
 
 	glColor3d(0.4, 0.4, 0.4);
 
 	//player1Home Grid
 	glPushMatrix();
-	glTranslated(0.45,-0.2,0.0);
-	glScaled(0.75, 1.0, 0.0); //0.75 used for screen scale
+	glTranslated(gridstartx,gridstarty,0.0);
+	glScaled(0.8, 0.8, 0.0); //0.75 used for screen scale
 	drawHome1();
 	glPopMatrix();
 
 
 
+
+
 	//'Finished' Button
 	glPushMatrix();
-	glColor3d(0.2, 0.7, 0.4);
-	glTranslated(-0.75, 0.0, 0.0);
-	glScaled(0.15*0.75, 0.15, 0.0);
+	glColor3d(finishcol[0],finishcol[1],finishcol[2]);
+	glTranslated(finish_x, finish_y, 0.0);
+	glScaled(0.15, 0.15, 0.0);
 	drawCirc();
 
 	glColor3d(0., 0., 0.); // Black text
-	glTranslated(0.5*.75, -1.0, 0.0);
+	glTranslated(finish_x + 0.6, finish_y - 0.1, 0.0);
 	p.print("Finished!");
 	glPopMatrix();
 
@@ -222,7 +269,7 @@ void myDisplay()
 
 	glColor3d(0., 0., 0.);        // Black text
 
-	//glTranslated(0.0, -0.5, 0.0); //modify to change text position
+	glTranslated(-1.4, 0.975, 0.0); //modify to change text position
 	if (showdisplay == true)
 	{
 		p.print("Welcome to Battleship");
@@ -231,6 +278,16 @@ void myDisplay()
 		p.print("then choosing a direction. Click the");
 		p.print("'finished' button when you are done to ");
 		p.print("pass it to the next player.");
+		p.print("");
+		p.print("");
+		p.print("");
+		p.print("");
+		p.print("");
+		p.print("");
+
+		p.print("mx: " + std::to_string(cam_mousex));
+		p.print("my: " + std::to_string(cam_mousey));
+
 
 
 	}
@@ -268,9 +325,11 @@ void myIdle()
 void myReshape(int w, int h)
 {
 	// Set viewport & save window dimensions in globals
-	glViewport(0, 0, w, h);
-	winw = w;
-	winh = h;
+	glViewport(0, 0, startwinwd, startwinht);
+	winw = startwinwd;
+	winh = startwinht;
+	
+	float aspect = startwinwd / startwinht;
 
 	// Set up projection
 	// Save max/min x/y coords in globals
@@ -290,6 +349,16 @@ void myReshape(int w, int h)
 		cam_ymin = -double(h) / w;
 		cam_ymax = double(h) / w;
 	}
+
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(cam_xmin, cam_xmax, cam_ymin, cam_ymax);
+
+	glMatrixMode(GL_MODELVIEW);  // Always go back to model/view mode
+
+
+
 }
 
 
@@ -325,6 +394,8 @@ void saveMouse(int x, int y)
 	cam_mousey = cam_ymax + t * (cam_ymin - cam_ymax);
 }
 
+
+
 // myMouse
 // The GLUT mouse function
 void myMouse(int button, int state, int x, int y)
@@ -335,9 +406,21 @@ void myMouse(int button, int state, int x, int y)
 	// Find mouse pos in cam coords (saved in cam_mousex, cam_mousey)
 	saveMouse(x, y);
 
+
+
 	if (button == GLUT_LEFT_BUTTON)
 	{
 		leftmousedown = (state == GLUT_DOWN);
+
+		float xdist = pow(cam_mousex - finish_x, 2);
+		float ydist = pow(cam_mousey - finish_y, 2);
+
+		if (sqrt(xdist + ydist) < 0.15 && leftmousedown)
+		{
+			finishcol[0] = finish_clicked[0];
+			finishcol[1] = finish_clicked[1];
+			finishcol[2] = finish_clicked[2];
+		}
 
 
 	}
@@ -362,13 +445,6 @@ void myMotion(int x, int y)
 	// Find mouse pos in cam coords (saved in cam_mousex, cam_mousey)
 	saveMouse(x, y);
 
-	if (cam_mousex >= 0.0
-		&& cam_mousex <= 0.0
-		&& cam_mousey >= 0.0
-		&& cam_mousey <= 0.0)
-	{
-
-	}
 
 
 	glutPostRedisplay();
@@ -378,7 +454,55 @@ void myMotion(int x, int y)
 // The GLUT passiveMotion function
 void myPassiveMotion(int x, int y)
 {
+	// Save old mouse pos, for relative mouse-movement computation
+	double old_cam_mousex = cam_mousex;
+	double old_cam_mousey = cam_mousey;
+
 	saveMouse(x, y);
+
+
+	float xdist = pow(cam_mousex - finish_x, 2);
+	float ydist = pow(cam_mousey - finish_y, 2);
+
+	if (sqrt(xdist + ydist) < 0.15 && !leftmousedown)
+	{
+		finishcol[0] = finish_hover[0];
+		finishcol[1] = finish_hover[1];
+		finishcol[2] = finish_hover[2];
+	}
+	else
+	{
+		finishcol[0] = finish_base[0];
+		finishcol[1] = finish_base[1];
+		finishcol[2] = finish_base[2];
+	}
+
+
+
+	for (int i = 0; i < player1Home.getSize(); i++)
+	{
+		for (int j = 0; j < player1Home.getSize(); j++)
+		{
+			if (cam_mousex >= player1Home.board_[i][j].leftbound
+				&& cam_mousex <= player1Home.board_[i][j].rightbound
+				&& cam_mousey >= player1Home.board_[i][j].bottombound
+				&& cam_mousey <= player1Home.board_[i][j].topbound)
+			{
+				player1Home.board_[i][j].squarehover = true;
+
+			}
+			else
+			{
+				player1Home.board_[i][j].squarehover = false;
+			}
+		}
+	}
+
+
+
+	
+
+
 	glutPostRedisplay();
 }
 

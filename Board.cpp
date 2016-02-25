@@ -32,20 +32,22 @@ int Board::totalCells()
 
 void Board::setHead(int cell)
 {
-	board_[cell].setHead();
+	//board_[cell].setHead();
 }
 
 void Board::setOccupied(int cell)
 {
-	board_[10].setOccupied();
+	//board_[10].setOccupied();
 }
 
 bool Board::isHead(int cell)
 {
-	return board_[10].isHead();
+	//return board_[10].isHead();
+	return false;
 }
 
 bool Board::isOccupied(int cell)
 {
-	return board_[10].isOccupied();
+	//return board_[10].isOccupied();
+	return false;
 }

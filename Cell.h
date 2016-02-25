@@ -5,6 +5,14 @@
 class Cell
 {
 public:
+	//these are currently public so that functions to set/retrieve
+	//each aren't necessary unless you have another idea.
+	float bottombound;
+	float topbound;
+	float leftbound;
+	float rightbound;
+	bool squarehover = false; //whether the mouse is over the cell
+
 	bool isOccupied();
 	bool isHead();
 	void setOccupied();

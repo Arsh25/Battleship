@@ -1,4 +1,4 @@
-// fa2.h  
+// Board.h  
 // Tristan J Craddick
 // For CS 372 Battleship Game
 
@@ -29,13 +29,13 @@ public:
 	bool isHead(int);
 	bool isOccupied(int);
 
-
+	vector<vector<Cell>> board_;
 private:
 	int boardSize_;
 	bool squareOccupied_;
 	bool isPrimary_;
-	vector<Cell> board_; // Represents the individual cells 
-
+	//vector<Cell> board_; // Represents the individual cells 
+	
 
 public:
 
@@ -43,7 +43,11 @@ public:
 
 Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary)
 {  
-	board_.resize(boardSize_*boardSize_); 
+	board_.resize(boardSize_); 
+	for (int i = 0; i < boardSize_; i++)
+	{
+		board_[i].resize(boardSize_);
+	}
 }
 
 };
