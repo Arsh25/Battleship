@@ -20,6 +20,9 @@ using std::size_t;
 using std::function;
 using std::bind;
 using namespace std::placeholders;
+#include <tuple>
+using std::tuple;
+using std::make_tuple;
 // For _1, used with std::bind
 
 
@@ -70,6 +73,24 @@ TEST_CASE("Setting Cell Properties", "[CELL]")
 	cell1.setHead();
 	REQUIRE(cell1.isHead() == true);
 	
+}
+
+TEST_CASE("Testing Cell Bounds", "[CELL]")
+{
+	Cell cell1;
+	cell1.setBounds(1,2,3,4);
+	tuple <float,float,float,float> correctBounds = make_tuple(2,1,3,4);
+	auto recvdAnswer=cell1.getBounds();
+	REQUIRE(recvdAnswer == correctBounds);
+	cell1.setBounds(2.33,-4.55,23,45.55);
+	correctBounds = make_tuple(-4.55,2.33,23,45.55);
+	recvdAnswer = cell1.getBounds();
+	REQUIRE(recvdAnswer == correctBounds);
+	cell1.setBounds(-2.33,-4.55,-23,-45.55);
+	correctBounds = make_tuple(-4.55,-2.33,-23,-45.55);
+	recvdAnswer = cell1.getBounds();
+	REQUIRE(recvdAnswer == correctBounds);
+
 }
 
 
