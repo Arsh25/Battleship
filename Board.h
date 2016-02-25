@@ -2,24 +2,15 @@
 // Tristan J Craddick
 // For CS 372 Battleship Game
 
-#ifndef Board_h_included
-#define Board_h_included
+#ifndef BOARD_H_INCLUDED
+#define BOARD_H_INCLUDED
 
+#include "Cell.h"
 #include <vector>
 using std::vector;
 #include <cstddef>
 using std::size_t;
 
-class Cell
-{
-public:
-	bool isOccupied();
-	bool isHead();
-	void setOccupied();
-	void setHead();
-
-	bool occupied;
-};
 
 //------------------Prototypes-----------------------\\
 
@@ -31,43 +22,31 @@ public:
 	int getSize();
 	void setSize(int size);
 
-
+//--------functions to act on our board's cells--------//
+	int totalCells();
+	void setHead(int);
+	void setOccupied(int); 
+	bool isHead(int);
+	bool isOccupied(int);
 
 
 private:
 	int boardSize_;
 	bool squareOccupied_;
 	bool isPrimary_;
+	vector<Cell> board_; // Represents the individual cells 
+
 
 public:
-//	Cell * board = new Cell[boardSize_][boardSize_];
 
-	vector<Cell> board_;
+//-----------------Constructors----------------------//
 
-
-//-----------------Constructors----------------------\\
-
-Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary){  board_.resize(boardSize_); }
+Board (int size, bool isPrimary):boardSize_(size),isPrimary_(isPrimary)
+{  
+	board_.resize(boardSize_*boardSize_); 
+}
 
 };
 
-//-------------------Function Definitions------------\\
-
-
-int Board::getSize()
-{
-	return boardSize_;
-	
-}
-
-void Board::setSize(int size)
-{
-	boardSize_ = size;
-}
-
-bool Board::isPrimary()
-{
-	return isPrimary_;
-}
 
 #endif
