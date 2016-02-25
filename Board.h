@@ -10,7 +10,16 @@ using std::vector;
 #include <cstddef>
 using std::size_t;
 
+class Cell
+{
+public:
+	bool isOccupied();
+	bool isHead();
+	void setOccupied();
+	void setHead();
 
+	bool occupied;
+};
 
 //------------------Prototypes-----------------------\\
 
@@ -24,12 +33,17 @@ public:
 
 
 
+
 private:
 	int boardSize_;
 	bool squareOccupied_;
 	bool isPrimary_;
 
 public:
+//	Cell * board = new Cell[boardSize_][boardSize_];
+
+	vector<Cell> board;
+
 
 //-----------------Constructors----------------------\\
 
