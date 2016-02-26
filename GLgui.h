@@ -58,8 +58,8 @@ bool gui_Board = false;
 const int ESCKEY = 27;         // ASCII value of Escape
 
 // Window/viewport
-const int startwinwd = 1200;    // Window width, height (pixels)
-const int startwinht = 800;
+const int startwinwd = 1024;    // Window width, height (pixels)
+const int startwinht = 768;
 const int startwinposx = 100;   // Window top-left corner x, y (pixels)
 const int startwinposy = 25;
 const double vxmin = -1.;      // Viewport bdaries in world (cam coords)
@@ -83,7 +83,7 @@ Board player1Target(10, false);
 Board player2Home(10, true);
 Board player2Target(10, false);
 
-float gridstartx = -0.1;
+float gridstartx = -0.2;
 float gridstarty = 0.65;
 
 
@@ -99,7 +99,7 @@ bool showdisplay = true; //shows the text display
 bool finbuttonhover = false; //if mouse is over the finished button
 
 //variables for the 'finished' button
-float finish_x = -1.25;
+float finish_x = -1.;
 float finish_y = 0.0;
 
 
@@ -275,7 +275,7 @@ void myDisplay()
 	drawCirc();
 
 	glColor3d(0., 0., 0.); // Black text
-	glTranslated(finish_x + 0.6, finish_y - 0.1, 0.0);
+	glTranslated(finish_x + 0.45, finish_y - 0.1, 0.0);
 	p.print("Finished!");
 	glPopMatrix();
 
@@ -287,7 +287,7 @@ void myDisplay()
 
 	glColor3d(0., 0., 0.);        // Black text
 
-	glTranslated(-1.4, 0.975, 0.0); //modify to change text position
+	glTranslated(-1.25, 0.975, 0.0); //modify to change text position
 	if (showdisplay == true)
 	{
 		p.print("Welcome to Battleship");

@@ -10217,7 +10217,9 @@ int main (int argc, char ** argv) // int main(int argc, char * argv[])
 	glutPassiveMotionFunc(myPassiveMotion);
 
 	Catch::Session().run(argc, argv);
-	system("pause"); //for testing purposes, pauses before display
+	//system("pause"); //for testing purposes, pauses before display
+	std::cin.get();
+	std::cin.get();
 
 
 	glutMainLoop();
