@@ -17,7 +17,7 @@ using std::size_t;
 class Board
 {
 public:
-	bool isOccupied();
+	bool isOccupied(int,int);
 	bool isPrimary();
 	int getSize();
 	void setSize(int size);
@@ -27,14 +27,15 @@ public:
 	void setHead(int,int);
 	void setOccupied(int,int); 
 	bool isHead(int,int);
-	bool isOccupied(int,int);
 
-	vector<vector<Cell>> board_;
-private:
+	vector<vector<Cell>> board_; //Coolection of cells 
+	
+ private:
 	int boardSize_;
 	int totalCells_;
 	bool squareOccupied_;
 	bool isPrimary_;
+
 	//vector<Cell> board_; // Represents the individual cells 
 	
 
