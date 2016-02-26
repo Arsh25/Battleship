@@ -117,7 +117,9 @@ bool rightmousedown;
 
 double cam_mousex, cam_mousey; // Mouse pos in cam coords
 
-
+bool isClicking = false;
+int outeri = 0;
+int outerj = 0;
 //-----------------Drawing Functions---------------
 
 //drawSquare
@@ -181,13 +183,13 @@ void drawHome1()
 	{
 		for (int j = 0; j < player1Home.getSize(); j++)
 		{
-
+			glColor3d(0.4, 0.4, 0.4);
 			float x = (0.2*i);
-			float y = (0.2*j);
+			float y = -(0.2*j);
 
 			glPushMatrix();
 			glColor3d(0.4, 0.4, 0.4);
-			glTranslated(x, -y, 0.0);
+			glTranslated(x, y, 0.0);
 			glScaled(0.1, 0.1, 0.0);
 			drawEmpSquare();
 
@@ -196,22 +198,37 @@ void drawHome1()
 				glColor3d(0.8, 0.8, 0.0);
 				drawSquare();
 			}
+
 			
-			float linethickness = 0.0125;
-			float ax = 2 * (i + linethickness) * 0.1;
-			float ay = 2 * (j + linethickness) * 0.1;
+			float ax = i*0.16;
+			float ay = -(j*0.16);
 
 
 			//This needs to be fixed to take into account the linethickness
 			//between each square.
-			float leftBound = x - 0.075 + gridstartx ;
-			float rightBound = x + 0.075 + gridstartx ;
-			float topBound = -y + 0.075 + gridstarty ;
-			float bottomBound = -y - 0.075 + gridstarty ;
-			player1Home.board_[i][j].setBounds(topBound,bottomBound,leftBound,rightBound); 
-			glPopMatrix();
+			float leftBound = ax - 0.075 + gridstartx ;
+			float rightBound = ax + 0.075 + gridstartx ;
+
+			float bottomBound = ay - 0.075 + gridstarty;
+			float topBound = ay + 0.075 + gridstarty ;
 
 			
+			player1Home.board_[i][j].setBounds(topBound,bottomBound,leftBound,rightBound); 
+			
+
+			if (player1Home.board_[i][j].isHead())
+			{
+				glColor3d(0.4, 0.4, 0.9);
+				drawSquare();
+			}
+			if (player1Home.board_[i][j].isOccupied() == true && player1Home.board_[i][j].isHead() == false)
+			{
+				glColor3d(0.3, 0.7, 0.7);
+				drawSquare();
+			}
+			
+			
+			glPopMatrix();
 
 		}
 	}
@@ -246,7 +263,6 @@ void myDisplay()
 	glScaled(0.8, 0.8, 0.0); //0.75 used for screen scale
 	drawHome1();
 	glPopMatrix();
-
 
 
 
@@ -407,7 +423,7 @@ void myMouse(int button, int state, int x, int y)
 	double old_cam_mousey = cam_mousey;
 	// Find mouse pos in cam coords (saved in cam_mousex, cam_mousey)
 	saveMouse(x, y);
-
+	BitmapPrinter p(0.0, 0.0, 0.1);
 
 
 	if (button == GLUT_LEFT_BUTTON)
@@ -417,11 +433,161 @@ void myMouse(int button, int state, int x, int y)
 		float xdist = pow(cam_mousex - finish_x, 2);
 		float ydist = pow(cam_mousey - finish_y, 2);
 
+
+
 		if (sqrt(xdist + ydist) < 0.15 && leftmousedown)
 		{
 			finishcol[0] = finish_clicked[0];
 			finishcol[1] = finish_clicked[1];
 			finishcol[2] = finish_clicked[2];
+		}
+
+
+
+
+		for (int i = 0; i < player1Home.getSize(); i++)
+		{
+			for (int j = 0; j < player1Home.getSize(); j++)
+			{
+
+				//Placing the ships
+				if (isClicking == false)
+				{
+					if (player1Home.board_[i][j].getSquareHover() == true)
+					{
+						if (player1Home.board_[i][j].isOccupied() == false)
+						{
+
+
+							if (isClicking == false)
+							{
+								player1Home.board_[i][j].setHead();
+								player1Home.board_[i][j].setOccupied();
+								isClicking = true;
+								outeri = i;
+								outerj = j;
+							}
+
+
+
+
+							if (isClicking == true)
+							{
+
+
+
+
+							}
+
+
+
+						}
+
+
+					}
+				}
+
+				
+
+
+
+			}
+		}
+
+
+		if (isClicking)
+		{
+			tuple<float, float, float, float> cellBounds = player1Home.board_[outeri][outerj].getBounds();
+			float bottomside = std::get<0>(cellBounds);
+			float topside = std::get<1>(cellBounds);
+			float leftside = std::get<2>(cellBounds);
+			float rightside = std::get<3>(cellBounds);
+
+			float xp = (0.16*outeri) + gridstartx;
+			float yp = -(0.16*outerj) + gridstarty;
+
+			float lxwall = xp - (abs(xp - leftside) / 2);
+			float rxwall = xp + (abs(xp - rightside) / 2);
+
+			float topywall = yp + (abs(yp - topside) / 2);
+			float botywall = yp - (abs(yp - bottomside) / 2);
+
+
+
+			//facing up
+			if (cam_mousex >= lxwall
+				&& cam_mousex <= rxwall
+				&& cam_mousey >= topywall + 0.1)
+			{
+				if (outerj > 2)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						player1Home.board_[outeri][outerj - 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+			}
+
+
+			//facing down
+			if (cam_mousex >= lxwall
+				&& cam_mousex <= rxwall
+				&& cam_mousey <= botywall - 0.1)
+			{
+				if (outerj < 10)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						player1Home.board_[outeri][outerj + 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+			}
+
+			//facing left
+			if (cam_mousey >= botywall
+				&& cam_mousey <= topywall
+				&& cam_mousex <= lxwall - 0.1)
+			{
+				if (outeri > 2)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						player1Home.board_[outeri - 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+			}
+
+			//facing right
+			if (cam_mousey >= botywall
+				&& cam_mousey <= topywall
+				&& cam_mousex >= rxwall + 0.1)
+			{
+				if (outeri < 10)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						player1Home.board_[outeri + 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+			}
+
+
 		}
 
 
