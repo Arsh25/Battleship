@@ -178,7 +178,6 @@ void drawCirc()
 //draws the home grid for player 1 
 void drawHome1()
 {
-	
 	for (int i = 0; i < player1Home.getSize(); i++)
 	{
 		for (int j = 0; j < player1Home.getSize(); j++)
@@ -203,6 +202,13 @@ void drawHome1()
 			float ax = i*0.16;
 			float ay = -(j*0.16);
 
+			glPushMatrix();
+			glScaled(0.05, 0.05, 0.0);
+			glTranslated(gridstartx + ax, gridstarty + ay, 0.0);
+
+			//drawCirc();
+
+			glPopMatrix();
 
 			//This needs to be fixed to take into account the linethickness
 			//between each square.
@@ -349,6 +355,8 @@ void myReshape(int w, int h)
 	
 	float aspect = startwinwd / startwinht;
 
+
+
 	// Set up projection
 	// Save max/min x/y coords in globals
 	// Projection is orthographic. Aspect ratio is correct,
@@ -375,8 +383,11 @@ void myReshape(int w, int h)
 
 	glMatrixMode(GL_MODELVIEW);  // Always go back to model/view mode
 
-
-
+	if (w != 1024 || h != 768)
+	{
+		glutReshapeWindow(1024, 768);
+	}
+	
 }
 
 
