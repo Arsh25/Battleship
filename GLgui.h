@@ -519,7 +519,7 @@ void myMouse(int button, int state, int x, int y)
 				&& cam_mousex <= rxwall
 				&& cam_mousey >= topywall + 0.1)
 			{
-				if (outerj > 2)
+				if (outerj > 1)
 				{
 					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
 						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false)
@@ -556,7 +556,7 @@ void myMouse(int button, int state, int x, int y)
 				&& cam_mousey <= topywall
 				&& cam_mousex <= lxwall - 0.1)
 			{
-				if (outeri > 2)
+				if (outeri > 1)
 				{
 					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
 						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false)
