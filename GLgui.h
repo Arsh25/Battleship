@@ -58,8 +58,11 @@ bool gui_Board = false;
 const int ESCKEY = 27;         // ASCII value of Escape
 
 // Window/viewport
-const int startwinwd = 1024;    // Window width, height (pixels)
-const int startwinht = 768;
+
+// (1024x768) vs 960x720 vs vs 900x675 vs  800 x 600
+
+const int startwinwd = 800;    // Window width, height (pixels)
+const int startwinht = 600;
 const int startwinposx = 100;   // Window top-left corner x, y (pixels)
 const int startwinposy = 25;
 const double vxmin = -1.;      // Viewport bdaries in world (cam coords)
@@ -100,7 +103,7 @@ bool finbuttonhover = false; //if mouse is over the finished button
 
 //variables for the 'finished' button
 float finish_x = -1.;
-float finish_y = 0.0;
+float finish_y = 0.3; //0.0
 
 
 float finishcol[3] = { 0.2, 0.7, 0.4 };
@@ -281,7 +284,10 @@ void myDisplay()
 	drawCirc();
 
 	glColor3d(0., 0., 0.); // Black text
-	glTranslated(finish_x + 0.45, finish_y - 0.1, 0.0);
+	glTranslated(finish_x + 0.25, finish_y - 0.35, 0.0); // x + 0.45, y - 0.1
+
+	glScaled(0.75, 0.75, 0.0); //used for 800x600 aspect ratio 
+
 	p.print("Finished!");
 	glPopMatrix();
 
@@ -292,8 +298,11 @@ void myDisplay()
 	glLoadIdentity();
 
 	glColor3d(0., 0., 0.);        // Black text
-
 	glTranslated(-1.25, 0.975, 0.0); //modify to change text position
+
+	glScaled(0.5, 0.45, 0.0); //used for 800x600 aspect ratio.
+
+	
 	if (showdisplay == true)
 	{
 		p.print("Welcome to Battleship");
@@ -302,9 +311,6 @@ void myDisplay()
 		p.print("then choosing a direction. Click the");
 		p.print("'finished' button when you are done to ");
 		p.print("pass it to the next player.");
-		p.print("");
-		p.print("");
-		p.print("");
 		p.print("");
 		p.print("");
 		p.print("");
@@ -383,7 +389,7 @@ void myReshape(int w, int h)
 
 	glMatrixMode(GL_MODELVIEW);  // Always go back to model/view mode
 
-	if (w != 1024 || h != 768)
+	if (w != startwinwd || h != startwinht)
 	{
 		glutReshapeWindow(1024, 768);
 	}
