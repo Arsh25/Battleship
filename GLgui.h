@@ -532,9 +532,9 @@ void myMouse(int button, int state, int x, int y)
 
 
 			//facing up
-			if (cam_mousex >= lxwall
-				&& cam_mousex <= rxwall
-				&& cam_mousey >= topywall + 0.1)
+			if (cam_mousex >= xp-0.1
+				&& cam_mousex <= xp+0.1
+				&& cam_mousey >= yp + 0.1)
 			{
 				if (outerj > 1)
 				{
@@ -551,9 +551,9 @@ void myMouse(int button, int state, int x, int y)
 
 
 			//facing down
-			if (cam_mousex >= lxwall
-				&& cam_mousex <= rxwall
-				&& cam_mousey <= botywall - 0.1)
+			if (cam_mousex >= xp-0.1
+				&& cam_mousex <= xp+0.1
+				&& cam_mousey <= yp - 0.1)
 			{
 				if (outerj < 10)
 				{
@@ -569,9 +569,9 @@ void myMouse(int button, int state, int x, int y)
 			}
 
 			//facing left
-			if (cam_mousey >= botywall
-				&& cam_mousey <= topywall
-				&& cam_mousex <= lxwall - 0.1)
+			if (cam_mousey >= yp-0.1
+				&& cam_mousey <= yp+0.1
+				&& cam_mousex <= xp-0.1)
 			{
 				if (outeri > 1)
 				{
@@ -587,9 +587,9 @@ void myMouse(int button, int state, int x, int y)
 			}
 
 			//facing right
-			if (cam_mousey >= botywall
-				&& cam_mousey <= topywall
-				&& cam_mousex >= rxwall + 0.1)
+			if (cam_mousey >= yp-0.1
+				&& cam_mousey <= yp+0.1
+				&& cam_mousex >= xp+0.1)
 			{
 				if (outeri < 10)
 				{
