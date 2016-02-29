@@ -50,6 +50,12 @@ void Cell::setHead()
 	isHead_ = true;
 }
 
+void Cell::removeHead()
+{
+	isHead_ = false;
+	isOccupied_ = false;
+}
+
 tuple<float,float,float,float> Cell::getBounds()
 {
 	return make_tuple <float&,float&,float&,float&> (bottomBound_,topBound_,leftBound_,rightBound_);

@@ -111,6 +111,17 @@ float finish_base[3] = { 0.2,0.7,0.4 };
 float finish_hover[3] = { 0.5, 1.0, 0.7 };
 float finish_clicked[3] = { 0.1, 0.5, 0.2 };
 
+//color variables for the box function
+//An array of 5 ships with the second array being the color and size
+float boxcol[5][4];
+
+
+float box_base[3] = { 0.3,0.5,0.7 };
+float box_hover[3] = { 0.5, 0.7, 1.0 };
+float box_clicked[3] = { 0.1, 0.2, 0.5 };
+
+int curr_ship = 0;
+
 
 
 //-----------------Mouse Based Variables----------------
@@ -123,6 +134,7 @@ double cam_mousex, cam_mousey; // Mouse pos in cam coords
 bool isClicking = false;
 int outeri = 0;
 int outerj = 0;
+
 //-----------------Drawing Functions---------------
 
 //drawSquare
@@ -175,6 +187,96 @@ void drawCirc()
 	}
 
 	glEnd();
+}
+
+//boxButton()
+//Draws a box for the ship buttons
+void boxButton()
+{
+	glPushMatrix();
+	glScaled(0.25, 0.05, 0.0);
+	drawSquare();
+	glPopMatrix();
+
+}
+
+//boxButtonHover()
+//
+void boxButtonHover()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		if (cam_mousex <= -0.75
+			&& cam_mousex >= -1.25
+			&& cam_mousey <= (-0.28 + (-0.125 * i) + 0.05)
+			&& cam_mousey >= (-0.28 + (-0.125 * i) - 0.05) )
+		{
+			boxcol[i][0] = box_hover[0];
+			boxcol[i][1] = box_hover[1];
+			boxcol[i][2] = box_hover[2];
+		}
+		else
+		{
+			boxcol[i][0] = box_base[0];
+			boxcol[i][1] = box_base[1];
+			boxcol[i][2] = box_base[2];
+		}
+	}
+}
+
+//boxButtonClic()
+//
+void boxButtonClick()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		if (cam_mousex <= -0.75
+			&& cam_mousex >= -1.25
+			&& cam_mousey <= (-0.28 + (-0.125 * i) + 0.05)
+			&& cam_mousey >= (-0.28 + (-0.125 * i) - 0.05))
+		{
+			boxcol[i][0] = box_clicked[0];
+			boxcol[i][1] = box_clicked[1];
+			boxcol[i][2] = box_clicked[2];
+			curr_ship = i;
+		}
+	}
+}
+
+
+
+//boxWords()
+//
+void boxWords()
+{
+	glColor3d(0.0, 0.0, 0.0);
+	BitmapPrinter button(0.0, 0.0, 0.1);
+	glPushMatrix();
+	glTranslated(-1.24, -0.3, 0.0);
+	button.print("Aircraft Carrier");
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-1.24, -0.318, 0.0);
+	button.print("Battleship");
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-1.24, -0.34, 0.0);
+	button.print("Submarine");
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-1.24, -0.37, 0.0);
+	button.print("Destroyer");
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-1.24, -0.39, 0.0);
+	button.print("Patrol Boat");
+	glPopMatrix();
+
+
 }
 
 //drawHome1
@@ -246,6 +348,412 @@ void drawHome1()
 
 }
 
+//Used with the mouse function for detecting clicks on the home player board.
+void p1BoardPlace()
+{
+	float xdist = pow(cam_mousex - finish_x, 2);
+	float ydist = pow(cam_mousey - finish_y, 2);
+
+
+
+	if (sqrt(xdist + ydist) < 0.15 && leftmousedown)
+	{
+		finishcol[0] = finish_clicked[0];
+		finishcol[1] = finish_clicked[1];
+		finishcol[2] = finish_clicked[2];
+	}
+
+
+
+
+	for (int i = 0; i < player1Home.getSize(); i++)
+	{
+		for (int j = 0; j < player1Home.getSize(); j++)
+		{
+
+			//Placing the ships
+			if (isClicking == false)
+			{
+				if (player1Home.board_[i][j].getSquareHover() == true)
+				{
+					if (player1Home.board_[i][j].isOccupied() == false)
+					{
+
+
+						if (isClicking == false)
+						{
+							player1Home.board_[i][j].setHead();
+							player1Home.board_[i][j].setOccupied();
+							isClicking = true;
+							outeri = i;
+							outerj = j;
+						}
+
+					}
+
+
+				}
+			}
+
+		}
+	}
+
+
+	if (isClicking)
+	{
+
+
+		tuple<float, float, float, float> cellBounds = player1Home.board_[outeri][outerj].getBounds();
+		float bottomside = std::get<0>(cellBounds);
+		float topside = std::get<1>(cellBounds);
+		float leftside = std::get<2>(cellBounds);
+		float rightside = std::get<3>(cellBounds);
+
+		float xp = (0.16*outeri) + gridstartx;
+		float yp = -(0.16*outerj) + gridstarty;
+
+		float lxwall = xp - (abs(xp - leftside) / 2);
+		float rxwall = xp + (abs(xp - rightside) / 2);
+
+		float topywall = yp + (abs(yp - topside) / 2);
+		float botywall = yp - (abs(yp - bottomside) / 2);
+
+
+
+		//facing up
+		if (cam_mousex >= xp - 0.1
+			&& cam_mousex <= xp + 0.1
+			&& cam_mousey >= yp + 0.1)
+		{
+
+			switch (curr_ship)
+			{
+			case 0:
+				if (outerj > 3)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 3].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 4].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						player1Home.board_[outeri][outerj - 2].setOccupied();
+						player1Home.board_[outeri][outerj - 3].setOccupied();
+						player1Home.board_[outeri][outerj - 4].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 1:
+				if (outerj > 2)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 3].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						player1Home.board_[outeri][outerj - 2].setOccupied();
+						player1Home.board_[outeri][outerj - 3].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 2:
+				if (outerj > 1)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						player1Home.board_[outeri][outerj - 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 3:
+				if (outerj > 1)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						player1Home.board_[outeri][outerj - 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 4:
+				if (outerj > 0)
+				{
+					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj - 1].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			}
+
+
+
+		}
+
+
+		//facing down
+		if (cam_mousex >= xp - 0.1
+			&& cam_mousex <= xp + 0.1
+			&& cam_mousey <= yp - 0.1)
+		{
+
+			switch (curr_ship)
+			{
+			case 0:
+				if (outerj < 6)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 3].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 4].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						player1Home.board_[outeri][outerj + 2].setOccupied();
+						player1Home.board_[outeri][outerj + 3].setOccupied();
+						player1Home.board_[outeri][outerj + 4].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 1:
+				if (outerj < 7)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 3].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						player1Home.board_[outeri][outerj + 2].setOccupied();
+						player1Home.board_[outeri][outerj + 3].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 2:
+				if (outerj < 8)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						player1Home.board_[outeri][outerj + 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 3:
+				if (outerj < 8)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
+						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						player1Home.board_[outeri][outerj + 2].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 4:
+				if (outerj < 9)
+				{
+					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false)
+					{
+						player1Home.board_[outeri][outerj + 1].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			}
+
+
+		}
+
+		//facing left
+		if (cam_mousey >= yp - 0.1
+			&& cam_mousey <= yp + 0.1
+			&& cam_mousex <= xp - 0.1)
+		{
+
+			switch (curr_ship)
+			{
+			case 0:
+				if (outeri > 3)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 3][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 4][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						player1Home.board_[outeri - 2][outerj].setOccupied();
+						player1Home.board_[outeri - 3][outerj].setOccupied();
+						player1Home.board_[outeri - 4][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 1:
+				if (outeri > 2)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 3][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						player1Home.board_[outeri - 2][outerj].setOccupied();
+						player1Home.board_[outeri - 3][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 2:
+				if (outeri > 1)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						player1Home.board_[outeri - 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 3:
+				if (outeri > 1)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						player1Home.board_[outeri - 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 4:
+				if (outeri > 0)
+				{
+					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri - 1][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			}
+
+
+		}
+
+		//facing right
+		if (cam_mousey >= yp - 0.1
+			&& cam_mousey <= yp + 0.1
+			&& cam_mousex >= xp + 0.1)
+		{
+
+			switch (curr_ship)
+			{
+			case 0:
+				if (outeri < 6)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 3][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 4][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						player1Home.board_[outeri + 2][outerj].setOccupied();
+						player1Home.board_[outeri + 3][outerj].setOccupied();
+						player1Home.board_[outeri + 4][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 1:
+				if (outeri < 7)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 3][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						player1Home.board_[outeri + 2][outerj].setOccupied();
+						player1Home.board_[outeri + 3][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 2:
+				if (outeri < 8)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						player1Home.board_[outeri + 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 3:
+				if (outeri < 8)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
+						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						player1Home.board_[outeri + 2][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			case 4:
+				if (outeri < 9)
+				{
+					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false)
+					{
+						player1Home.board_[outeri + 1][outerj].setOccupied();
+						isClicking = false;
+						return;
+					}
+				}
+				break;
+			}
+
+
+		}
+
+
+	}
+
+}
 
 
 //---------------Display, Idle, Reshape Functions-----------------\\
@@ -258,11 +766,9 @@ void myDisplay()
 	glClear(GL_COLOR_BUFFER_BIT);
 	BitmapPrinter p(0.0, 0.0, 0.1);
 
-	
-
 	glLoadIdentity();
 
-
+	
 
 	glColor3d(0.4, 0.4, 0.4);
 
@@ -273,6 +779,20 @@ void myDisplay()
 	drawHome1();
 	glPopMatrix();
 
+
+	//ship buttons
+	glPushMatrix();
+	glTranslated(-1.0, -0.15, 0.0);
+	for (int i = 0; i < 5; i++)
+	{
+		glTranslated(0.0, -0.125, 0.0);
+		glColor3d(boxcol[i][0], boxcol[i][1], boxcol[i][2]);
+		boxButton();		
+	}
+	glPopMatrix();
+
+	//adds words to the box buttons
+	boxWords();
 
 
 
@@ -312,8 +832,30 @@ void myDisplay()
 		p.print("'finished' button when you are done to ");
 		p.print("pass it to the next player.");
 		p.print("");
+		//p.print("");
+		switch (curr_ship)
+		{
+		case 0:
+			p.print("Ship Selected: Airship Carrier");
+			break;
+		case 1:
+			p.print("Ship Selected: Battleship");
+			break;
+		case 2:
+			p.print("Ship Selected: Submarine");
+			break;
+		case 3:
+			p.print("Ship Selected: Destroyer");
+			break;
+		case 4:
+			p.print("Ship Selected: Patrol Boat");
+			break;
+		}
+
+
+
 		p.print("");
-		p.print("");
+		
 
 		p.print("mx: " + std::to_string(cam_mousex));
 		p.print("my: " + std::to_string(cam_mousey));
@@ -447,166 +989,8 @@ void myMouse(int button, int state, int x, int y)
 	{
 		leftmousedown = (state == GLUT_DOWN);
 
-		float xdist = pow(cam_mousex - finish_x, 2);
-		float ydist = pow(cam_mousey - finish_y, 2);
-
-
-
-		if (sqrt(xdist + ydist) < 0.15 && leftmousedown)
-		{
-			finishcol[0] = finish_clicked[0];
-			finishcol[1] = finish_clicked[1];
-			finishcol[2] = finish_clicked[2];
-		}
-
-
-
-
-		for (int i = 0; i < player1Home.getSize(); i++)
-		{
-			for (int j = 0; j < player1Home.getSize(); j++)
-			{
-
-				//Placing the ships
-				if (isClicking == false)
-				{
-					if (player1Home.board_[i][j].getSquareHover() == true)
-					{
-						if (player1Home.board_[i][j].isOccupied() == false)
-						{
-
-
-							if (isClicking == false)
-							{
-								player1Home.board_[i][j].setHead();
-								player1Home.board_[i][j].setOccupied();
-								isClicking = true;
-								outeri = i;
-								outerj = j;
-							}
-
-
-
-
-							if (isClicking == true)
-							{
-
-
-
-
-							}
-
-
-
-						}
-
-
-					}
-				}
-
-				
-
-
-
-			}
-		}
-
-
-		if (isClicking)
-		{
-			tuple<float, float, float, float> cellBounds = player1Home.board_[outeri][outerj].getBounds();
-			float bottomside = std::get<0>(cellBounds);
-			float topside = std::get<1>(cellBounds);
-			float leftside = std::get<2>(cellBounds);
-			float rightside = std::get<3>(cellBounds);
-
-			float xp = (0.16*outeri) + gridstartx;
-			float yp = -(0.16*outerj) + gridstarty;
-
-			float lxwall = xp - (abs(xp - leftside) / 2);
-			float rxwall = xp + (abs(xp - rightside) / 2);
-
-			float topywall = yp + (abs(yp - topside) / 2);
-			float botywall = yp - (abs(yp - bottomside) / 2);
-
-
-
-			//facing up
-			if (cam_mousex >= xp-0.1
-				&& cam_mousex <= xp+0.1
-				&& cam_mousey >= yp + 0.1)
-			{
-				if (outerj > 1)
-				{
-					if (player1Home.board_[outeri][outerj - 1].isOccupied() == false
-						&& player1Home.board_[outeri][outerj - 2].isOccupied() == false)
-					{
-						player1Home.board_[outeri][outerj - 1].setOccupied();
-						player1Home.board_[outeri][outerj - 2].setOccupied();
-						isClicking = false;
-						return;
-					}
-				}
-			}
-
-
-			//facing down
-			if (cam_mousex >= xp-0.1
-				&& cam_mousex <= xp+0.1
-				&& cam_mousey <= yp - 0.1)
-			{
-				if (outerj < 8)
-				{
-					if (player1Home.board_[outeri][outerj + 1].isOccupied() == false
-						&& player1Home.board_[outeri][outerj + 2].isOccupied() == false)
-					{
-						player1Home.board_[outeri][outerj + 1].setOccupied();
-						player1Home.board_[outeri][outerj + 2].setOccupied();
-						isClicking = false;
-						return;
-					}
-				}
-			}
-
-			//facing left
-			if (cam_mousey >= yp-0.1
-				&& cam_mousey <= yp+0.1
-				&& cam_mousex <= xp-0.1)
-			{
-				if (outeri > 1)
-				{
-					if (player1Home.board_[outeri - 1][outerj].isOccupied() == false
-						&& player1Home.board_[outeri - 2][outerj].isOccupied() == false)
-					{
-						player1Home.board_[outeri - 1][outerj].setOccupied();
-						player1Home.board_[outeri - 2][outerj].setOccupied();
-						isClicking = false;
-						return;
-					}
-				}
-			}
-
-			//facing right
-			if (cam_mousey >= yp-0.1
-				&& cam_mousey <= yp+0.1
-				&& cam_mousex >= xp+0.1)
-			{
-				if (outeri < 8)
-				{
-					if (player1Home.board_[outeri + 1][outerj].isOccupied() == false
-						&& player1Home.board_[outeri + 2][outerj].isOccupied() == false)
-					{
-						player1Home.board_[outeri + 1][outerj].setOccupied();
-						player1Home.board_[outeri + 2][outerj].setOccupied();
-						isClicking = false;
-						return;
-					}
-				}
-			}
-
-
-		}
-
+		p1BoardPlace();
+		boxButtonClick();
 
 	}
 
@@ -614,6 +998,13 @@ void myMouse(int button, int state, int x, int y)
 	{
 		rightmousedown = (state == GLUT_DOWN);
 		
+		if (isClicking)
+		{
+			isClicking = false;
+			player1Home.board_[outeri][outerj].removeHead();
+
+		}
+
 
 	}
 	glutPostRedisplay();
@@ -686,7 +1077,7 @@ void myPassiveMotion(int x, int y)
 
 
 
-	
+	boxButtonHover();
 
 
 	glutPostRedisplay();
@@ -713,6 +1104,22 @@ void init()
 	//mouse
 	cam_mousex = 0.0;
 	cam_mousey = 0.0;
+
+	//sets colors for the array of box buttons
+	for (int i = 0; i < 5; i++)
+	{
+		boxcol[i][0] = 0.3;
+		boxcol[i][1] = 0.5;
+		boxcol[i][2] = 0.7;
+	}
+
+	//sets the sizes of the respective ships.
+	boxcol[0][3] = 5;
+	boxcol[1][3] = 4;
+	boxcol[2][3] = 3;
+	boxcol[3][3] = 3;
+	boxcol[4][3] = 2;
+
 
 	// OpenGL Stuff
 	glLineWidth(5.0);

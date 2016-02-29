@@ -15,6 +15,7 @@ public:
 	bool isHead();
 	void setOccupied();
 	void setHead();
+	void removeHead();
 	tuple<float,float,float,float> getBounds();
 	void setBounds(float,float,float,float);
 	bool getSquareHover();
