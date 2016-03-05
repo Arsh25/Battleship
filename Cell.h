@@ -16,6 +16,10 @@ public:
 	void setOccupied();
 	void setHead();
 	void removeHead();
+
+	void setMiss(); //if a spot that isn't occupied is hit
+	void setHit(); //if a spot that is occupied is hit
+
 	tuple<float,float,float,float> getBounds();
 	void setBounds(float,float,float,float);
 	bool getSquareHover();
@@ -25,6 +29,10 @@ public:
 private:
 	bool isHead_;
 	bool isOccupied_;
+
+	bool isHit_;
+	bool isMiss_;
+
 	bool squareHover_; //whether the mouse is over the cell
 	float bottomBound_;
 	float topBound_;
