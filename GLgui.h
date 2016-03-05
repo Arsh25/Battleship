@@ -236,10 +236,13 @@ void boxButtonClick()
 			&& cam_mousey <= (-0.28 + (-0.125 * i) + 0.05)
 			&& cam_mousey >= (-0.28 + (-0.125 * i) - 0.05))
 		{
-			boxcol[i][0] = box_clicked[0];
-			boxcol[i][1] = box_clicked[1];
-			boxcol[i][2] = box_clicked[2];
-			curr_ship = i;
+			if (box_used[i] == false)
+			{
+				boxcol[i][0] = box_clicked[0];
+				boxcol[i][1] = box_clicked[1];
+				boxcol[i][2] = box_clicked[2];
+				curr_ship = i;
+			}
 		}
 	}
 }
@@ -251,14 +254,20 @@ void boxButtonClick()
 void boxWords()
 {
 	glColor3d(0.0, 0.0, 0.0);
-	BitmapPrinter button(0.0, 0.0, 0.1);
+
+	//need to figure out how to roll these into 1 declaration
+	BitmapPrinter button1(0.0, 0.0, 0.1);
+	BitmapPrinter button2(0.0, 0.0, 0.1);
+	BitmapPrinter button3(0.0, 0.0, 0.1);
+	BitmapPrinter button4(0.0, 0.0, 0.1);
+	BitmapPrinter button5(0.0, 0.0, 0.1);
 
 
 	glPushMatrix();
 	glTranslated(-1.24, -0.3, 0.0);
 	if (box_used[0] == false)
 	{
-		button.print("Aircraft Carrier");
+		button1.print("Aircraft Carrier");
 	}
 	glPopMatrix();
 
@@ -266,36 +275,36 @@ void boxWords()
 	glTranslated(-1.24, -0.41, 0.0);
 	if (box_used[1] == false)
 	{
-		button.print("Battleship");
+		button2.print("Battleship");
 	}
 	glPopMatrix();
 
-	/*
+	
 
-	//glPushMatrix();
-	glTranslated(-1.24, -0.34, 0.0);
+	glPushMatrix();
+	glTranslated(-1.24, -0.54, 0.0);
 	if (box_used[2] == false)
 	{
-		button.print("Submarine");
+		button3.print("Submarine");
 	}
-	//glPopMatrix();
+	glPopMatrix();
 
-	//glPushMatrix();
-	glTranslated(-1.24, -0.37, 0.0);
+	glPushMatrix();
+	glTranslated(-1.24, -0.665, 0.0);
 	if (box_used[3] == false)
 	{
-		button.print("Destroyer");
+		button4.print("Destroyer");
 	}
-	//glPopMatrix();
+	glPopMatrix();
 
-	//glPushMatrix();
-	glTranslated(-1.24, -0.39, 0.0);
+	glPushMatrix();
+	glTranslated(-1.24, -0.79, 0.0);
 	if (box_used[4] == false)
 	{
-		button.print("Patrol Boat");
+		button5.print("Patrol Boat");
 	}
-	//glPopMatrix();
-	*/
+	glPopMatrix();
+	
 
 }
 
@@ -860,7 +869,9 @@ void myDisplay()
 	glPopMatrix();
 
 	//adds words to the box buttons
+	glPushMatrix();
 	boxWords();
+	glPopMatrix();
 
 
 
