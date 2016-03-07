@@ -51,7 +51,9 @@ void finishClick()
 			p1turn = true;
 			p2turn = false;
 		}
-
+		turn_count++;
+		ships_placed = 0;
+		has_fired = false;
 	}
 }
 
@@ -67,7 +69,7 @@ void boxButton()
 }
 
 //boxButtonHover()
-//
+//highlights the ship boxes if the mouse is over them
 void boxButtonHover()
 {
 	for (int i = 0; i < 5; i++)
@@ -90,8 +92,9 @@ void boxButtonHover()
 	}
 }
 
-//boxButtonClic()
-//
+//boxButtonClick()
+//darkens the boxes if they are clicked and sets the selected ship
+//based off of which one was clicked.
 void boxButtonClick()
 {
 	for (int i = 0; i < 5; i++)

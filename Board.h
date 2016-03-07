@@ -25,10 +25,10 @@ public:
 //--------functions to act on our board's cells--------//
 	int totalCells();
 	void setHead(int,int);
-	void setOccupied(int,int); 
+	void setOccupied(int,int);
 	bool isHead(int,int);
 
-	vector<vector<Cell>> board_; //Coolection of cells 
+	vector<vector<Cell>> board_; //Collection of cells 
 	
  private:
 	int boardSize_;

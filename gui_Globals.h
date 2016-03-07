@@ -11,8 +11,11 @@ bool gui_Include = true;
 // Variables are initiated properly (Init function called)
 bool gui_Init = false;
 
-// Variable displayed if board is properly displayed 
-bool gui_Board = false;
+// Variable displayed if the large board is properly displayed 
+bool gui_L_Board = false;
+
+//variable for if the small board is properly displayed
+bool gui_S_Board = false;
 
 //-----------------Window and Display variables-----------------
 
@@ -35,7 +38,7 @@ const double vymax = 1.;
 int winw = 1, winh = 1;        // Window width, height (pixels)
 
 
-							   // Viewport bdaries in world (cam coords)
+// Viewport bdaries in world (cam coords)
 double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 
 
@@ -47,15 +50,27 @@ Board player1Target(10, false);
 Board player2Home(10, true);
 Board player2Target(10, false);
 
-float gridstartx = -0.2;
-float gridstarty = 0.65;
+float l_gridstart_x = -0.2;
+float l_gridstart_y = 0.65;
+
+float s_gridstart_x = -1.2;
+float s_gridstart_y = 0.05;
 
 
 //-----------Misc Variables---------------
 
 double savetime;    // Time of previous movement (sec)
 
+bool game_start;
 
+int turn_count; // A variable that is incremented each time a player ends their turn
+
+int ships_placed; //number of ships a player has placed in their initial turn.
+bool has_fired; //if the player has fired in their turn or not.
+
+
+//ships placed variable for both players, when all ships are placed,
+//then the finished button will be available.
 
 bool p1turn = true;
 bool p2turn = false;

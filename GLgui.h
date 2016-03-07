@@ -60,107 +60,150 @@ void myDisplay()
 
 	
 
-	glColor3d(0.4, 0.4, 0.4);
+	glColor3d(0.4, 0.4, 0.4); //color for the cell borders
 
-	//player1Home Grid
+	//Large grid on the right
 	if (p1turn == true)
 	{
 		glPushMatrix();
-		glTranslated(gridstartx, gridstarty, 0.0);
+		glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
 		glScaled(0.8, 0.8, 0.0);
-		drawHome1();
+		drawLargeGrid(player1Home);
 		glPopMatrix();
 	}
 	else
 	{
 		glPushMatrix();
-		glTranslated(gridstartx, gridstarty, 0.0);
+		glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
 		glScaled(0.8, 0.8, 0.0);
-		drawHome2();
+		drawLargeGrid(player2Home);
+		glPopMatrix();
+	}
+
+	if (game_start == false)
+	{
+		//ship buttons
+		glPushMatrix();
+		glTranslated(-1.0, -0.15, 0.0);
+		for (int i = 0; i < 5; i++)
+		{
+			glTranslated(0.0, -0.125, 0.0);
+			glColor3d(boxcol[i][0], boxcol[i][1], boxcol[i][2]);
+			if (box_used[i] == false)
+			{
+				boxButton();
+			}
+
+		}
+		glPopMatrix();
+
+		//adds words to the box buttons
+		glPushMatrix();
+		boxWords();
+		glPopMatrix();
+	}
+	else //game_start == true, so secondary board is displayed.
+	{
+		if (p1turn == true)
+		{
+			glPushMatrix();
+			glTranslated(s_gridstart_x, s_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawSmallBoard(player1Home);
+			glPopMatrix();
+		}
+		else
+		{
+			glPushMatrix();
+			glTranslated(s_gridstart_x, s_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawSmallBoard(player2Home);
+
+			glPopMatrix();
+		}
+	}
+
+
+
+
+
+	//'Finished' Button
+	//all ships have been placed for a player or the player has fired
+	if (ships_placed == 5 || has_fired == true) 
+	{
+		glPushMatrix();
+		glColor3d(finishcol[0], finishcol[1], finishcol[2]);
+		glTranslated(finish_x, finish_y, 0.0);
+		glScaled(0.15, 0.15, 0.0);
+		drawCirc();
+
+		glColor3d(0., 0., 0.); // Black text
+		glTranslated(finish_x + 0.25, finish_y - 0.35, 0.0); // x + 0.45, y - 0.1
+
+		glScaled(0.75, 0.75, 0.0); //used for 800x600 aspect ratio 
+
+		p.print("Finished!");
 		glPopMatrix();
 	}
 
 
 
-	//ship buttons
-	glPushMatrix();
-	glTranslated(-1.0, -0.15, 0.0);
-	for (int i = 0; i < 5; i++)
-	{
-		glTranslated(0.0, -0.125, 0.0);
-		glColor3d(boxcol[i][0], boxcol[i][1], boxcol[i][2]);
-		if (box_used[i] == false)
-		{
-			boxButton();
-		}
-	
-	}
-	glPopMatrix();
 
-	//adds words to the box buttons
-	glPushMatrix();
-	boxWords();
-	glPopMatrix();
-
-
-
-	//'Finished' Button
-	glPushMatrix();
-	glColor3d(finishcol[0],finishcol[1],finishcol[2]);
-	glTranslated(finish_x, finish_y, 0.0);
-	glScaled(0.15, 0.15, 0.0);
-	drawCirc();
-
-	glColor3d(0., 0., 0.); // Black text
-	glTranslated(finish_x + 0.25, finish_y - 0.35, 0.0); // x + 0.45, y - 0.1
-
-	glScaled(0.75, 0.75, 0.0); //used for 800x600 aspect ratio 
-
-	p.print("Finished!");
-	glPopMatrix();
 
 
 	//Instruction Text
 	glPushMatrix();
 	glColor3d(0., 0., 0.);        // Black text
-	glTranslated(-1.25, 0.975, 0.0); //modify to change text position
+	glTranslated(-1.25, 0.95, 0.0); //modify to change text position
 	glScaled(0.5, 0.45, 0.0); //used for 800x600 aspect ratio.
 
-	p.print("Welcome to Battleship");
-	p.print("Please use the mouse to place ships");
-	p.print("on the board by clicking a grid square,");
-	p.print("then choosing a direction. Click the");
-	p.print("'finished' button when you are done to ");
-	p.print("pass it to the next player.");
-	p.print("");
-	//p.print("");
-	switch (curr_ship)
+
+	if (game_start == false)
 	{
-	case 0:
-		p.print("Ship Selected: Airship Carrier");
-		break;
-	case 1:
-		p.print("Ship Selected: Battleship");
-		break;
-	case 2:
-		p.print("Ship Selected: Submarine");
-		break;
-	case 3:
-		p.print("Ship Selected: Destroyer");
-		break;
-	case 4:
-		p.print("Ship Selected: Patrol Boat");
-		break;
+		p.print("Welcome to Battleship");
+		p.print("Please use the mouse to place ships");
+		p.print("on the board by clicking a grid square,");
+		p.print("then choosing a direction. Click the");
+		p.print("'finished' button when you are done to ");
+		p.print("pass it to the next player.");
+		p.print("");
+
+		switch (curr_ship)
+		{
+		case 0:
+			p.print("Ship Selected: Airship Carrier");
+			break;
+		case 1:
+			p.print("Ship Selected: Battleship");
+			break;
+		case 2:
+			p.print("Ship Selected: Submarine");
+			break;
+		case 3:
+			p.print("Ship Selected: Destroyer");
+			break;
+		case 4:
+			p.print("Ship Selected: Patrol Boat");
+			break;
+		}
 	}
+	else
+	{
+		p.print("Click on a grid cell to fire a shot.");
+		p.print("The first to sink all of the opponent's");
+		p.print("ships is the winner!");
+	}
+
+
 
 	p.print("");
 	p.print("mx: " + std::to_string(cam_mousex));
 	p.print("my: " + std::to_string(cam_mousey));
 
-
 	glPopMatrix();                // Restore prev projection
 
 
+	//Text in upper right showing whose turn it is.
 	glPushMatrix();
 	glColor3d(0., 0., 0.);        // Black text
 	glTranslated(0.5, 0.875, 0.0); //modify to change text position
@@ -205,7 +248,11 @@ void myIdle()
 	if (elapsedtime > 0.1)
 		elapsedtime = 0.1;
 
-	//glutPostRedisplay();
+	//Both players have placed their ships, and the actual targeting game begins.
+	if (turn_count >= 2)
+	{
+		game_start = true;
+	}
 }
 
 // myReshape
@@ -247,9 +294,11 @@ void myReshape(int w, int h)
 
 	glMatrixMode(GL_MODELVIEW);  // Always go back to model/view mode
 
+
+	//if the window is resized, resets it back to the following amount.
 	if (w != startwinwd || h != startwinht)
 	{
-		glutReshapeWindow(1024, 768);
+		glutReshapeWindow(800, 600);
 	}
 	
 }
@@ -305,18 +354,34 @@ void myMouse(int button, int state, int x, int y)
 	{
 		leftmousedown = (state == GLUT_DOWN);
 
-		finishClick();
-
-		if (p1turn == true)
+		if (ships_placed == 5 || has_fired == true)
 		{
-			p1BoardPlace();
-		}
-		else
-		{
-			p2BoardPlace();
+			finishClick();
 		}
 
-		boxButtonClick();
+
+		if (game_start == false)
+		{
+
+
+			if (p1turn == true)
+			{
+				boardPlace(player1Home);
+			}
+			else
+			{
+				boardPlace(player2Home);
+			}
+
+			boxButtonClick();
+		}
+		else //game has started, and targeting begins.
+		{
+
+		}
+
+
+
 
 	}
 
@@ -390,11 +455,11 @@ void myPassiveMotion(int x, int y)
 
 	if (p1turn == true)
 	{
-		p1BoardHover();
+		boardHover(player1Home);
 	}
 	else
 	{
-		p2BoardHover();
+		boardHover(player2Home);
 	}
 
 
@@ -416,9 +481,6 @@ void myPassiveMotion(int x, int y)
 // Called by main after window creation
 void init()
 {
-	//Initializes the seed for the random number generator
-	std::srand(std::time(NULL));
-
 	// Objects
 	savetime = glutGet(GLUT_ELAPSED_TIME) / 1000.;
 
@@ -428,7 +490,8 @@ void init()
 	cam_mousex = 0.0;
 	cam_mousey = 0.0;
 
-	//sets colors for the array of box buttons
+	//sets colors for the array of box buttons and sets their 'used'
+	//variable to false.
 	for (int i = 0; i < 5; i++)
 	{
 		boxcol[i][0] = 0.3;
@@ -439,13 +502,16 @@ void init()
 	}
 
 	//sets the sizes of the respective ships.
-	boxcol[0][3] = 5;
-	boxcol[1][3] = 4;
-	boxcol[2][3] = 3;
-	boxcol[3][3] = 3;
-	boxcol[4][3] = 2;
+	boxcol[0][3] = 5; //Aircraft Carrier
+	boxcol[1][3] = 4; //Battleship
+	boxcol[2][3] = 3; //Destroyer
+	boxcol[3][3] = 3; //Submarine
+	boxcol[4][3] = 2; //Patrol Boat
 
-
+	game_start = false;
+	turn_count = 0;
+	ships_placed = 0;
+	has_fired = false;
 
 	// OpenGL Stuff
 	glLineWidth(5.0);
