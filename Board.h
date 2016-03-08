@@ -1,5 +1,5 @@
 // Board.h  
-// Tristan J Craddick
+// Tristan J Craddick and Arsh Chauhan
 // For CS 372 Battleship Game
 
 #ifndef BOARD_H_INCLUDED
@@ -12,7 +12,7 @@ using std::vector;
 using std::size_t;
 
 
-//------------------Prototypes-----------------------\\
+/*****************Prototypes********************/
 
 class Board
 {
@@ -22,7 +22,7 @@ public:
 	int getSize();
 	void setSize(int size);
 
-//--------functions to act on our board's cells--------//
+/*****************functions to act on our board's cells********************/
 	int totalCells();
 	void setHead(int,int);
 	void setOccupied(int,int);
@@ -35,13 +35,11 @@ public:
 	int totalCells_;
 	bool squareOccupied_;
 	bool isPrimary_;
-
-	//vector<Cell> board_; // Represents the individual cells 
 	
 
 public:
 
-//-----------------Constructors----------------------//
+/*****************Constructors********************/
 
 Board (int size, bool isPrimary):boardSize_(size),totalCells_(size*size),isPrimary_(isPrimary)
 {  
