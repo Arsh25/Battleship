@@ -1,20 +1,26 @@
- CC=g++
+COMPILER=g++
 
-OPTS= -ansi -pedantic -Wall -Wextra -Wno-comment -Wno-unused-variable  -Wno-unused-parameter -Wno-unused-but-set-variable -std=c++11 
-DEBUG= -g -v -da -Q 
+DIRS=-I/usr/local/include -L/usr/local/lib
 
-SYSLIBS= -L/usr/local/lib -L/usr/X11R6/lib \
-	  -lSOIL -lglut -lGLU -lGL -lpthread -lm
+SOIL_DIR=SOIL
+SOIL=$(SOIL_DIR)/stb_image_aug.c $(SOIL_DIR)/SOIL.c
 
-#SYSLIBS= -L/usr/local/lib  \
-#	 -lpthread -lGL -lGLU -lglut -lSOIL
+ifeq ($(shell uname),Darwin)
+	OS_GL=-framework OpenGL -lGLEW -framework GLUT
+else
+	OS_GL=-lGL -lGLU -lglut -lGLEW
+endif
 
+PTHREAD=-lpthread
 
-test:Battleship_test.cpp Cell.cpp Board.cpp 
+LIB= $(PTHREAD) $(OS_GL)
 
-	$(CC) Battleship_test.cpp Cell.cpp Board.cpp  -O -o battleship_test $(OPTS) $(SYSLIBS)
+CFLAGS=-O0 -Wall -Wno-deprecated-declarations -Wno-unused-variable -std=c++11 -ggdb -Wl,--as-needed
 
-all: test
-	
-clean: 
-	-rm -f battleship_test
+all: battleship
+
+battleship: Battleship_test.cpp Cell.cpp Board.cpp $(SOIL)
+	$(COMPILER) $^ $(LIB) $(CFLAGS) $(DIRS) -o $@
+
+clean:
+	rm -f battleship battleship.exe
