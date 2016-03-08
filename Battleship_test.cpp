@@ -9,6 +9,7 @@
 
 #include "Board.h"
 #include "Cell.h"
+#include "Ship.h"
 
 #include <vector>
 using std::vector;
