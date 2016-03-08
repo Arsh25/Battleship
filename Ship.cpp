@@ -1,3 +1,9 @@
+/*
+	Arsh Chauhan
+	03/7/2016
+	Source for class Ship
+*/
+
 #include "Ship.h"
 #include <utility>
 using std::pair;

@@ -1,3 +1,9 @@
+/*
+	Arsh Chauhan
+	03/7/2016
+	Header for class Ship
+*/
+
 #ifndef SHIP_H_INCLUDED
 #define SHIP_H_INCLUDED
 
