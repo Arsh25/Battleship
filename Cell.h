@@ -8,8 +8,6 @@ using std::tuple;
 class Cell
 {
 public:
-	//these are currently public so that functions to set/retrieve
-	//each aren't necessary unless you have another idea.
 
 	bool isOccupied();
 	bool isHead();
@@ -39,7 +37,7 @@ private:
 	float leftBound_;
 	float rightBound_;
 
-//-------------------------------Constrcutors---------------------------\\
+/********************************Constructors**************************/
 
 public:
 	//Default ctor
