@@ -50,7 +50,7 @@ int winw = 1, winh = 1;        // Window width, height (pixels)
 double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 
 
-//------------Battleship Grids------------\\
+//*************Battleship Grids************
 
 Board player1Home(10, true);
 Board player1Target(10, false);

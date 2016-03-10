@@ -52,11 +52,10 @@ using std::tuple;
 
 
 
-//---------------Display, Idle, Reshape Functions-----------------\\
+//****************Display, Idle, Reshape Functions*****************
 
-//myDisplay
-//The glut display function
-/*
+/*myDisplay
+  The glut display function
 Pre: None
 Post: draws the information text for the player, the player's board
 	on the right, and if both players still needs to place ships, 
