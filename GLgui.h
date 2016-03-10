@@ -56,18 +56,23 @@ using std::tuple;
 
 //myDisplay
 //The glut display function
+/*
+Pre: None
+Post: draws the information text for the player, the player's board
+	on the right, and if both players still needs to place ships, 
+	then ship buttons in the bottom left for which ship to place. If
+	the ships have all been placed, then displays the player's board
+	in the bottom left and their targeting board on the right.
+*/
 void myDisplay()
 {
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	BitmapPrinter p(0.0, 0.0, 0.1);
+	BitmapPrinter text(0.0, 0.0, 0.1);
 	BitmapPrinter player(0.0, 0.0, 0.1);
 	BitmapPrinter button(0.0, 0.0, 0.1);
 
 	glLoadIdentity();
-
-	
-
 	glColor3d(0.4, 0.4, 0.4); //color for the cell borders
 
 
@@ -189,64 +194,64 @@ void myDisplay()
 
 	if (game_start == false)
 	{
-		p.print("Welcome to Battleship");
-		p.print("Please use the mouse to place ships");
-		p.print("on the board by clicking a grid square,");
-		p.print("then choosing a direction by clicking");
-		p.print("the next square over. Click the");
-		p.print("'finished' button when you are done to ");
-		p.print("pass it to the next player.");
-		p.print("");
+		text.print("Welcome to Battleship");
+		text.print("Please use the mouse to place ships");
+		text.print("on the board by clicking a grid square,");
+		text.print("then choosing a direction by clicking");
+		text.print("the next square over. Click the");
+		text.print("'finished' button when you are done to ");
+		text.print("pass it to the next player.");
+		text.print("");
 
 		switch (curr_ship)
 		{
 		case 0:
-			p.print("Ship Selected: Airship Carrier");
+			text.print("Ship Selected: Airship Carrier");
 			break;
 		case 1:
-			p.print("Ship Selected: Battleship");
+			text.print("Ship Selected: Battleship");
 			break;
 		case 2:
-			p.print("Ship Selected: Submarine");
+			text.print("Ship Selected: Submarine");
 			break;
 		case 3:
-			p.print("Ship Selected: Destroyer");
+			text.print("Ship Selected: Destroyer");
 			break;
 		case 4:
-			p.print("Ship Selected: Patrol Boat");
+			text.print("Ship Selected: Patrol Boat");
 			break;
 		}
 	}
 	else
 	{
-		p.print("Click on a grid cell to fire a shot.");
-		p.print("The first to sink all of the opponent's");
-		p.print("ships is the winner!");
+		text.print("Click on a grid cell to fire a shot.");
+		text.print("The first to sink all of the opponent's");
+		text.print("ships is the winner!");
 
 		if (p1turn == true)
 		{
-			p.print("AC: " + std::to_string(player1Home.ship_cells[0]));
-			p.print("Bat: " + std::to_string(player1Home.ship_cells[1]));
-			p.print("Des: " + std::to_string(player1Home.ship_cells[2]));
-			p.print("Sub: " + std::to_string(player1Home.ship_cells[3]));
-			p.print("PB: " + std::to_string(player1Home.ship_cells[4]));
+			text.print("AC: " + std::to_string(player1Home.ship_cells[0]));
+			text.print("Bat: " + std::to_string(player1Home.ship_cells[1]));
+			text.print("Des: " + std::to_string(player1Home.ship_cells[2]));
+			text.print("Sub: " + std::to_string(player1Home.ship_cells[3]));
+			text.print("PB: " + std::to_string(player1Home.ship_cells[4]));
 		}
 		else
 		{
-			p.print("AC: " + std::to_string(player2Home.ship_cells[0]));
-			p.print("Bat: " + std::to_string(player2Home.ship_cells[1]));
-			p.print("Des: " + std::to_string(player2Home.ship_cells[2]));
-			p.print("Sub: " + std::to_string(player2Home.ship_cells[3]));
-			p.print("PB: " + std::to_string(player2Home.ship_cells[4]));
+			text.print("AC: " + std::to_string(player2Home.ship_cells[0]));
+			text.print("Bat: " + std::to_string(player2Home.ship_cells[1]));
+			text.print("Des: " + std::to_string(player2Home.ship_cells[2]));
+			text.print("Sub: " + std::to_string(player2Home.ship_cells[3]));
+			text.print("PB: " + std::to_string(player2Home.ship_cells[4]));
 		}
 
 	}
 
 
 
-	p.print("");
-	p.print("mx: " + std::to_string(cam_mousex));
-	p.print("my: " + std::to_string(cam_mousey));
+	text.print("");
+	text.print("mx: " + std::to_string(cam_mousex));
+	text.print("my: " + std::to_string(cam_mousey));
 
 	glPopMatrix();                // Restore prev projection
 
@@ -278,6 +283,11 @@ void myDisplay()
 
 //myIdle
 //Basic glut idle function
+/*
+Pre: None
+Post: A consistently updating function used for any variables
+	that should be constantly checked or updated.
+*/
 void myIdle()
 {
 	// Print OpenGL errors, if there are any (for debugging)
@@ -305,6 +315,12 @@ void myIdle()
 
 // myReshape
 // The GLUT reshape function
+/*
+Pre: None
+Post: Appropriately scales the drawn screen based upon the size 
+	of the window whenever it is adjusted. Currently set so that
+	window will always be readjusted to 800x600 ratio.
+*/
 void myReshape(int w, int h)
 {
 	// Set viewport & save window dimensions in globals
@@ -357,6 +373,11 @@ void myReshape(int w, int h)
 
 // myKeyboard
 // The GLUT keyboard function
+/*
+Pre: None
+Post: Detects keypresses and preforms operations based upon
+	which key is pressed.
+*/
 void myKeyboard(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -377,9 +398,13 @@ void myKeyboard(unsigned char key, int x, int y)
 }
 
 // saveMouse
-// Given mouse pos in GLUT format; computes mouse pos in cam coords,
-//  saves it in globals cam_mousex, cam_mousey.
-// Uses globals winw, winh, cam_xmin, cam_xmax, cam_ymin, cam_ymax.
+/*
+Pre: None
+Post:  Given mouse pos in GLUT format; computes mouse pos in cam coords,
+	saves it in globals cam_mousex, cam_mousey.
+	 Uses globals winw, winh, cam_xmin, cam_xmax, cam_ymin, cam_ymax.
+*/
+
 void saveMouse(int x, int y)
 {
 	double t;  // Intermediate value of lirping
@@ -395,6 +420,10 @@ void saveMouse(int x, int y)
 
 // myMouse
 // The GLUT mouse function
+/*
+Pre: None
+Post: Updates variables when the mouse buttons are clicked.
+*/
 void myMouse(int button, int state, int x, int y)
 {
 	// Save old mouse pos, for relative mouse-movement computation
@@ -473,6 +502,10 @@ void myMouse(int button, int state, int x, int y)
 
 // myMotion
 // The GLUT motion function
+/*
+Pre: None
+Post: Updates the mouse position when the mouse is moved.
+*/
 void myMotion(int x, int y)
 {
 	// Save old mouse pos, for relative mouse-movement computation
@@ -489,6 +522,11 @@ glutPostRedisplay();
 
 // myPassiveMotion
 // The GLUT passiveMotion function
+/*
+Pre: None
+Post: Updates variables, generally for the button detection
+	when the mouse moves.
+*/
 void myPassiveMotion(int x, int y)
 {
 	// Save old mouse pos, for relative mouse-movement computation
@@ -555,6 +593,11 @@ void myPassiveMotion(int x, int y)
 // init
 // Initialize GL states & global data
 // Called by main after window creation
+/*
+Pre: None
+Post: Function called at the beginning of the program
+	that properly sets all uninitialized variables.
+*/
 void init()
 {
 	// Objects
@@ -594,6 +637,13 @@ void init()
 	showdisplay = true;
 }
 
+//pauseScreen
+/*
+Pre: None
+Post: A seperately drawn screen that displays the pause
+	screen with a message so that players can switch
+	between boards without risk of cheating.
+*/
 void pauseScreen()
 {
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
@@ -610,6 +660,10 @@ void pauseScreen()
 	glutSwapBuffers();
 }
 
+/*
+Pre: None
+Post: The screen drawn if it is detected that a player has won.
+*/
 void winDisplay()
 { 
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
@@ -625,6 +679,12 @@ void winDisplay()
 	glutSwapBuffers();
 }
 
+/*
+Pre: None
+Post: checks to see if a player has won based upon whose turn it was
+	and whether or not all occupied cells on the opposing player's 
+	board have been hit.
+*/
 void winCheck()
 {
 		if (p1turn)

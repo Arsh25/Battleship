@@ -73,7 +73,41 @@ TEST_CASE("Setting Cell Properties", "[CELL]")
 	REQUIRE(cell1.isHead() == false);
 	cell1.setHead();
 	REQUIRE(cell1.isHead() == true);
-	
+
+
+	Cell target;
+	REQUIRE(target.isMiss() == false);
+	target.setMiss();
+	REQUIRE(target.isMiss() == true);
+
+	Cell target2;
+	REQUIRE(target2.isHit() == false);
+	target2.setHit();
+	REQUIRE(target2.isHit() == true);
+}
+
+//Tests to see if cell properties are correctly returned
+TEST_CASE("Detecting if cell counts are properly decremented", "[CELL]")
+{
+	const int SIZE = 10;
+	Board ship_self(SIZE, true);
+	Board ship_opponent(SIZE, true);
+	ship_opponent.board_[0][0].setOccupied();
+	ship_opponent.board_[0][0].setID(0);
+	ship_opponent.ship_cells[0] = 1;
+
+	//simulating a shot
+	if (ship_opponent.board_[0][0].isOccupied() == true)
+	{
+		ship_self.board_[0][0].setHit();
+		shipCheck(ship_opponent, ship_opponent.board_[0][0].getID());
+		ship_opponent.board_[0][0].removeOccupied();
+	}
+
+	REQUIRE(ship_self.board_[0][0].isHit() == true);
+	REQUIRE(ship_opponent.ship_cells[0] == 0); //simulating a call to winCheck
+	REQUIRE(ship_opponent.board_[0][0].isOccupied() == false);
+
 }
 
 TEST_CASE("Testing Cell Bounds", "[CELL]")

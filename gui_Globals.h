@@ -31,9 +31,9 @@ bool gui_S_Board = false;
 // Keyboard
 const int ESCKEY = 27;         // ASCII value of Escape
 
-							   // Window/viewport
+// Window/viewport
 
-							   // (1024x768) vs 960x720 vs vs 900x675 vs  800 x 600
+ // (1024x768) vs 960x720 vs vs 900x675 vs  800 x 600
 
 const int startwinwd = 800;    // Window width, height (pixels)
 const int startwinht = 600;
@@ -84,9 +84,9 @@ string winner;
 bool showdisplay = true; //shows the text display
 bool finbuttonhover = false; //if mouse is over the finished button
 
-							 //variables for the 'finished' button
+//variables for the 'finished' button
 float finish_x = -1.;
-float finish_y = 0.3; //0.0
+float finish_y = 0.3;
 
 
 float finishcol[3] = { 0.2, 0.7, 0.4 };
@@ -120,8 +120,42 @@ bool isClicking = false;
 int outeri = 0;
 int outerj = 0;
 
-void winCheck();
+
+//----------------Function Prototypes-------------------
+//Display Screens
+void myDisplay();
+void winDisplay();
 void pauseScreen();
+
+//Core OpenGl/Glut Functions
+void myIdle();
+void myReshape(int w, int h);
+void myKeyboard(unsigned char key, int x, int y);
+void saveMouse(int x, int y);
+void myMouse(int button, int state, int x, int y);
+void myMotion(int x, int y);
+void myPassiveMotion(int x, int y);
+void init();
+void winCheck();
+
+//Board-based functions
+void drawSquare();
+void drawEmpSquare();
+void shipCheck(Board& player, int ID);
+void drawLargeGrid(Board& player);
+void drawSmallBoard(Board& player);
+void boardPlace(Board& player);
+void boardHover(Board& player);
+void boardFire(Board& player, Board& opponent);
+
+//Button-based functions
+void drawCirc();
+void finishClick();
+void boxButton();
+void boxButtonHover();
+void boxButtonClick();
+void boxWords();
+
 
 
 

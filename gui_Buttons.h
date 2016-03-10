@@ -13,6 +13,10 @@ For CS 372 Battleship Game
 
 // drawCircle
 // Draws a filled Circle
+/*
+Pre: None
+Post: draws a Circle with no other paramaters
+*/
 void drawCirc()
 {
 	glBegin(GL_POLYGON);
@@ -33,6 +37,13 @@ void drawCirc()
 
 //finishClick()
 //detects whether the player has clicked on the finish button
+/*
+Pre: none
+Post: Detects whether mouse is within bounds of the circle button.
+	if it is, then it checks for a player victory. If no player has
+	won, then it resets the appropriate variables for switching turns,
+	switches the turn, and switches display to the pause screen.
+*/
 void finishClick()
 {
 	float xdist = pow(cam_mousex - finish_x, 2);
@@ -81,6 +92,10 @@ void finishClick()
 
 //boxButton()
 //Draws a box for the ship buttons
+/*
+Pre: None
+Post: Draws a scaled box for use as a button
+*/
 void boxButton()
 {
 	glPushMatrix();
@@ -92,6 +107,11 @@ void boxButton()
 
 //boxButtonHover()
 //highlights the ship boxes if the mouse is over them
+/*
+Pre: None
+Post: If the mouse is within the bounds of the box, highlights
+	the box. Resets the color if the mouse is not over it.
+*/
 void boxButtonHover()
 {
 	for (int i = 0; i < 5; i++)
@@ -117,6 +137,13 @@ void boxButtonHover()
 //boxButtonClick()
 //darkens the boxes if they are clicked and sets the selected ship
 //based off of which one was clicked.
+/*
+Pre: None
+Post: Detects based off of the current mouse position whether the
+	mouse has clicked within the bounds of the box. If it has, then
+	it darkens the color of the box and sets the current ship
+	variable based upon which button was selected.
+*/
 void boxButtonClick()
 {
 	for (int i = 0; i < 5; i++)
@@ -140,12 +167,15 @@ void boxButtonClick()
 
 
 //boxWords()
-//
+/*
+Pre: None
+Post: Displays the text for each of the five ship
+	based buttons.
+*/
 void boxWords()
 {
 	glColor3d(0.0, 0.0, 0.0);
 
-	//need to figure out how to roll these into 1 declaration
 	BitmapPrinter button1(0.0, 0.0, 0.1);
 	BitmapPrinter button2(0.0, 0.0, 0.1);
 	BitmapPrinter button3(0.0, 0.0, 0.1);

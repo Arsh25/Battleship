@@ -14,7 +14,10 @@ For CS 372 Battleship Game
 //-----------------Drawing Functions---------------
 
 //drawSquare
-//draws the square target if it hasn't been targeted.
+/*
+Pre: None
+Post: Draws an unmodified, filled square.
+*/
 void drawSquare()
 {
 	glBegin(GL_POLYGON);
@@ -26,8 +29,11 @@ void drawSquare()
 
 }
 
-// Draws a outlined square, using current GL states,
-//  in the x,y plane, centered at the origin, aligned w/ x,y axes,
+// Draws a outlined square
+/*
+Pre: None
+Post: An unmodified, blank square is drawn on the screen.
+*/
 void drawEmpSquare()
 {
 	glBegin(GL_LINES);
@@ -51,6 +57,13 @@ void drawEmpSquare()
 //shipCheck()
 //when a shot fired is a confirmed hit, takes the id of the ship 
 //in the cell and decrements the appropriate counter.
+/*
+Pre: None
+Post: When a shot was detected as a hit upon a cell, detects which
+	ship the cell was a part of based upon the appropriate ID,
+	and decrements the board based counter to determine how many
+	cells of the ship are left.
+*/
 void shipCheck(Board& player, int ID)
 {
 	switch (ID)
@@ -84,6 +97,12 @@ void shipCheck(Board& player, int ID)
 //drawLargeGrid()
 //draws the Large Grid for placing ships and when the gae starts,
 //for firing upon.
+/*
+Pre: None
+Post: draws the large grid on the right side of the screen based upon
+	which board is passed into the function to check which cells are
+	occupied/hit/missed/etc.
+*/
 void drawLargeGrid(Board& player)
 {
 
@@ -134,13 +153,13 @@ void drawLargeGrid(Board& player)
 			}
 			if (player.board_[i][j].isMiss() == true)
 			{
-				glColor3d(0.7, 0.3, 0.3);
+				glColor3d(0.7, 0.3, 0.3); //red
 				drawSquare();
 
 			}
 			if (player.board_[i][j].isHit() == true)
 			{
-				glColor3d(0.3, 0.7, 0.3);
+				glColor3d(0.3, 0.7, 0.3); //green
 				drawSquare();
 
 			}
@@ -157,6 +176,12 @@ void drawLargeGrid(Board& player)
 
 //drawSmallBoard()
 //draws the small board in the lower left.
+/*
+Pre: None
+Post: draws a board in the lower left of the screen based upon which
+	board was passed into the function like the drawLargeBoard 
+	function.
+*/
 void drawSmallBoard(Board& player)
 {
 	for (int i = 0; i < player.getSize(); i++)
@@ -195,7 +220,7 @@ void drawSmallBoard(Board& player)
 			}
 			if (player.board_[i][j].isMiss() == true)
 			{
-				glColor3d(0.7, 0.3, 0.3);
+				glColor3d(0.7, 0.3, 0.3); //red
 				drawSquare();
 
 			}
@@ -210,10 +235,13 @@ void drawSmallBoard(Board& player)
 
 
 //boardPlace()
-//Upon first click on the large grid for the passed board, places the head of a ship,
-//and then, following the selection of the ship, when the mouse is within the bounds of
-//the four directions moving out from the head, places the body of 
-//the ship in said direction.
+/*
+Pre: None
+Post: Upon first click on the large grid for the passed board, places the head of a ship,
+	and then, following the selection of the ship, when the mouse is within the bounds of
+	the four directions moving out from the head, places the body of 
+	the ship in said direction.
+*/
 void boardPlace(Board& player)
 {
 
@@ -257,20 +285,8 @@ void boardPlace(Board& player)
 	//the size of the body.
 	if (isClicking)
 	{
-		tuple<float, float, float, float> cellBounds = player.board_[outeri][outerj].getBounds();
-		float bottomside = std::get<0>(cellBounds);
-		float topside = std::get<1>(cellBounds);
-		float leftside = std::get<2>(cellBounds);
-		float rightside = std::get<3>(cellBounds);
-
 		float xp = (0.16*outeri) + l_gridstart_x;
 		float yp = -(0.16*outerj) + l_gridstart_y;
-
-		float lxwall = xp - (abs(xp - leftside) / 2);
-		float rxwall = xp + (abs(xp - rightside) / 2);
-
-		float topywall = yp + (abs(yp - topside) / 2);
-		float botywall = yp - (abs(yp - bottomside) / 2);
 
 
 
@@ -763,6 +779,14 @@ void boardPlace(Board& player)
 
 //boardHover()
 //Detects whether the mouse is over a cell in the large grid for the passed board.
+/*
+Pre: None
+Post: using a tuple created from the bounds of a cell, checks to
+	see if the mouse is within the bounds of a cell, if it is,
+	then sets the cell variable for hovering to true, so that the square would
+	be highlighted. If the mouse is not within bounds, sets the highlight var
+	to false.
+*/
 void boardHover(Board& player)
 {
 	for (int i = 0; i < player.getSize(); i++)
@@ -789,6 +813,15 @@ void boardHover(Board& player)
 
 //boardFire()
 //Fires a shot at a cell on the board, determining if there is a hit or miss.
+/*
+Pre: None
+Post: Checks which cell of the passed player board was clicked, and checks
+	whether the associated cell on the opponents board is occupied. If it is
+	then modifies the cell of the opposing player's board, and decrements
+	the appropriate ship variable on their board, while setting the cell
+	of the player board to a 'hit'. Otherwise just sets the cell of
+	the player board to 'miss'.
+*/
 void boardFire(Board& player, Board& opponent)
 {
 

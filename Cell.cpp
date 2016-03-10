@@ -92,7 +92,11 @@ void Cell::setMiss()
 
 
 
-
+/*
+removeHead
+Pre: None
+Post: The cell is now longer the head, or occupied
+*/
 void Cell::removeHead()
 {
 	isHead_ = false;
@@ -100,17 +104,32 @@ void Cell::removeHead()
 	ship_ID = -1;
 }
 
+/*
+removeOccupied
+Pre: None
+Post: Cell is no longer occupied
+*/
 void Cell::removeOccupied()
 {
 	isOccupied_ = false;
 	ship_ID = -1;
 }
 
+/*
+getBounds
+Pre: None
+Post: returns a tuple containing the 4 bounds of a cell.
+*/
 tuple<float,float,float,float> Cell::getBounds()
 {
 	return make_tuple <float&,float&,float&,float&> (bottomBound_,topBound_,leftBound_,rightBound_);
 }
 
+/*
+setBounds
+Pre: None
+Post: sets the 4 bound-variables of a cell to the passed in bounds.
+*/
 void Cell::setBounds(float topBound, float bottomBound, float leftBound, float rightBound)
 {
 	topBound_ = topBound;
@@ -119,23 +138,42 @@ void Cell::setBounds(float topBound, float bottomBound, float leftBound, float r
 	rightBound_ = rightBound;
 }
 
+/*
+setSquareHover
+Pre: None
+Post: sets the variable for the mouse hovering over the square to true
+*/
 void Cell::setSquareHover(bool mouseOver)
 {
 	squareHover_ = mouseOver;
 
 }
 
+/*
+getSquareHover
+Pre: None
+Post: returns whether or not the square is currently being hovered over
+*/
 bool Cell::getSquareHover()
 {
 	return squareHover_;
 }
 
-
+/*
+getID
+Pre: None
+Post: returns the ship ID associated with the cell
+*/
 int Cell::getID()
 {
 	return ship_ID;
 }
 
+/*
+setMiss
+Pre: None
+Post: sets the ship ID associated with the cell.
+*/
 void Cell::setID(int num)
 {
 	ship_ID = num;

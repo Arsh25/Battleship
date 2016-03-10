@@ -10,8 +10,6 @@ Cell Header
 #include <tuple>
 using std::tuple;
 
-//#include "Ship.h"
-
 class Cell
 {
 public:

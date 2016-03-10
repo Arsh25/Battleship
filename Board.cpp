@@ -49,3 +49,5 @@ bool Board::isOccupied(int row, int column)
 {
 	return board_[row][column].isOccupied();
 }
+
+
