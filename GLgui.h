@@ -446,27 +446,33 @@ void myMouse(int button, int state, int x, int y)
 		if (game_start == false)
 		{
 
+			if (curr_ship != -1)
+			{
+				if (p1turn == true)
+				{
+					boardPlace(player1Home);
+				}
+				else
+				{
+					boardPlace(player2Home);
+				}
+			}
 
-			if (p1turn == true)
-			{
-				boardPlace(player1Home);
-			}
-			else
-			{
-				boardPlace(player2Home);
-			}
 
 			boxButtonClick();
 		}
 		else //game has started, and targeting begins.
 		{
-			if (p1turn == true)
+			if (has_fired == false)
 			{
-				boardFire(player1Target,player2Home);
-			}
-			else
-			{
-				boardFire(player2Target, player1Home);
+				if (p1turn == true)
+				{
+					boardFire(player1Target, player2Home);
+				}
+				else
+				{
+					boardFire(player2Target, player1Home);
+				}
 			}
 		}
 
