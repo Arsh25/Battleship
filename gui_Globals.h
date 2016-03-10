@@ -1,7 +1,15 @@
+/*
+Tristan Craddick
+Global Gui  Header
+
+For CS 372 Battleship Game
+*/
 
 #ifndef GUI_GLOBALS_H_INCLUDED
 #define GUI_GLOBALS_H_INCLUDED
 
+#include <string.h>
+using std::string;
 
 //-------------Initial Gui set-up variable for test case----------
 
@@ -44,14 +52,13 @@ double cam_xmin, cam_xmax, cam_ymin, cam_ymax;
 
 //------------Battleship Grids------------\\
 
-
 Board player1Home(10, true);
 Board player1Target(10, false);
 Board player2Home(10, true);
 Board player2Target(10, false);
 
-float l_gridstart_x = -0.2;
-float l_gridstart_y = 0.65;
+float l_gridstart_x = -0.225;
+float l_gridstart_y = 0.60;
 
 float s_gridstart_x = -1.2;
 float s_gridstart_y = 0.05;
@@ -69,11 +76,11 @@ int ships_placed; //number of ships a player has placed in their initial turn.
 bool has_fired; //if the player has fired in their turn or not.
 
 
-//ships placed variable for both players, when all ships are placed,
-//then the finished button will be available.
-
 bool p1turn = true;
 bool p2turn = false;
+
+string winner;
+
 bool showdisplay = true; //shows the text display
 bool finbuttonhover = false; //if mouse is over the finished button
 
@@ -100,17 +107,21 @@ bool box_used[5]; //if one of the ship buttons has been used.
 int curr_ship = -1; //set to arbitrary value outside of # of ships.
 
 
-
 //-----------------Mouse Based Variables----------------
 
 bool leftmousedown;     // true if left mouse button is down
 bool rightmousedown;
+
+bool game_pause;
 
 double cam_mousex, cam_mousey; // Mouse pos in cam coords
 
 bool isClicking = false;
 int outeri = 0;
 int outerj = 0;
+
+void winCheck();
+void pauseScreen();
 
 
 

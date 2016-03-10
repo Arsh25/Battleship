@@ -1,5 +1,5 @@
 /*
-	Arsh Chauhan
+	Arsh Chauhan and Tristan Craddick
 	2/24/2016
 	Source files for header Cell 
 */
@@ -31,6 +31,26 @@ bool Cell::isHead()
 }
 
 /*
+isHit
+Pre: None
+Post: Returns true if cell is the head of ship
+*/
+bool Cell::isHit()
+{
+	return isHit_;
+}
+
+/*
+isMiss
+Pre: None
+Post: Returns true if cell is the head of ship
+*/
+bool Cell::isMiss()
+{
+	return isMiss_;
+}
+
+/*
 	setOccupied
 	Pre: None
 	Post: Sets cell to occupied state 
@@ -50,10 +70,40 @@ void Cell::setHead()
 	isHead_ = true;
 }
 
+/*
+setHit
+Pre: None
+Post: Cell is now a head of some ship
+*/
+void Cell::setHit()
+{
+	isHit_ = true;
+}
+
+/*
+setMiss
+Pre: None
+Post: Cell is now a head of some ship
+*/
+void Cell::setMiss()
+{
+	isMiss_ = true;
+}
+
+
+
+
 void Cell::removeHead()
 {
 	isHead_ = false;
 	isOccupied_ = false;
+	ship_ID = -1;
+}
+
+void Cell::removeOccupied()
+{
+	isOccupied_ = false;
+	ship_ID = -1;
 }
 
 tuple<float,float,float,float> Cell::getBounds()
@@ -78,4 +128,15 @@ void Cell::setSquareHover(bool mouseOver)
 bool Cell::getSquareHover()
 {
 	return squareHover_;
+}
+
+
+int Cell::getID()
+{
+	return ship_ID;
+}
+
+void Cell::setID(int num)
+{
+	ship_ID = num;
 }

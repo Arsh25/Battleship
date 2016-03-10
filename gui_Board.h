@@ -1,4 +1,11 @@
 
+/*
+Tristan Craddick
+Board Gui  Header
+
+For CS 372 Battleship Game
+*/
+
 #ifndef GUI_BOARD_H_INCLUDED
 #define GUI_BOARD_H_INCLUDED
 
@@ -41,7 +48,38 @@ void drawEmpSquare()
 	glEnd();
 }
 
+//shipCheck()
+//when a shot fired is a confirmed hit, takes the id of the ship 
+//in the cell and decrements the appropriate counter.
+void shipCheck(Board& player, int ID)
+{
+	switch (ID)
+	{
+	case 0:
+		player.ship_cells[0]--;
+		break;
 
+	case 1:
+		player.ship_cells[1]--;
+		break;
+
+	case 2:
+		player.ship_cells[2]--;
+		break;
+
+	case 3:
+		player.ship_cells[3]--;
+		break;
+
+	case 4:
+		player.ship_cells[4]--;
+		break;
+
+
+
+
+	}
+}
 
 //drawLargeGrid()
 //draws the Large Grid for placing ships and when the gae starts,
@@ -94,6 +132,18 @@ void drawLargeGrid(Board& player)
 				glColor3d(0.3, 0.7, 0.7); //light blue
 				drawSquare();
 			}
+			if (player.board_[i][j].isMiss() == true)
+			{
+				glColor3d(0.7, 0.3, 0.3);
+				drawSquare();
+
+			}
+			if (player.board_[i][j].isHit() == true)
+			{
+				glColor3d(0.3, 0.7, 0.3);
+				drawSquare();
+
+			}
 			
 			
 			glPopMatrix();
@@ -143,6 +193,12 @@ void drawSmallBoard(Board& player)
 				glColor3d(0.3, 0.7, 0.7); //light blue
 				drawSquare();
 			}
+			if (player.board_[i][j].isMiss() == true)
+			{
+				glColor3d(0.7, 0.3, 0.3);
+				drawSquare();
+
+			}
 
 
 			glPopMatrix();
@@ -160,6 +216,7 @@ void drawSmallBoard(Board& player)
 //the ship in said direction.
 void boardPlace(Board& player)
 {
+
 	//this loop set involves the placement of the head of the ship on the board,
 	//it sets the isClicking variable to true which tells the program that the
 	//next loop set will be used for determining the orientation of the ship.
@@ -177,14 +234,12 @@ void boardPlace(Board& player)
 					{
 
 
-						if (isClicking == false)
-						{
 							player.board_[i][j].setHead();
 							player.board_[i][j].setOccupied();
 							isClicking = true;
 							outeri = i;
 							outerj = j;
-						}
+						
 
 					}
 
@@ -220,9 +275,10 @@ void boardPlace(Board& player)
 
 
 		//facing up
-		if (cam_mousex >= xp - 0.1
-			&& cam_mousex <= xp + 0.1
-			&& cam_mousey >= yp + 0.1)
+		if (cam_mousex >= xp - 0.073
+			&& cam_mousex <= xp + 0.073
+			&& cam_mousey >= yp + 0.073
+			&& cam_mousey <= yp + 0.233)
 		{
 
 			switch (curr_ship)
@@ -241,6 +297,12 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj - 4].setOccupied();
 						isClicking = false;
 						box_used[0] = true;
+						player.ship_cells[0] = 5;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj-1].setID(curr_ship);
+						player.board_[outeri][outerj-2].setID(curr_ship);
+						player.board_[outeri][outerj-3].setID(curr_ship);
+						player.board_[outeri][outerj-4].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -259,6 +321,11 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj - 3].setOccupied();
 						isClicking = false;
 						box_used[1] = true;
+						player.ship_cells[1] = 4;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj - 1].setID(curr_ship);
+						player.board_[outeri][outerj - 2].setID(curr_ship);
+						player.board_[outeri][outerj - 3].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -275,6 +342,10 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj - 2].setOccupied();
 						isClicking = false;
 						box_used[2] = true;
+						player.ship_cells[2] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj - 1].setID(curr_ship);
+						player.board_[outeri][outerj - 2].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -291,6 +362,10 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj - 2].setOccupied();
 						isClicking = false;
 						box_used[3] = true;
+						player.ship_cells[3] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj - 1].setID(curr_ship);
+						player.board_[outeri][outerj - 2].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -305,6 +380,9 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj - 1].setOccupied();
 						isClicking = false;
 						box_used[4] = true;
+						player.ship_cells[4] = 2;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj - 1].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -319,9 +397,10 @@ void boardPlace(Board& player)
 
 
 		//facing down
-		if (cam_mousex >= xp - 0.1
-			&& cam_mousex <= xp + 0.1
-			&& cam_mousey <= yp - 0.1)
+		if (cam_mousex >= xp - 0.073
+			&& cam_mousex <= xp + 0.073
+			&& cam_mousey <= yp - 0.073
+			&& cam_mousey >= yp - 0.233)
 		{
 
 			switch (curr_ship)
@@ -340,6 +419,12 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj + 4].setOccupied();
 						isClicking = false;
 						box_used[0] = true;
+						player.ship_cells[0] = 5;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj + 1].setID(curr_ship);
+						player.board_[outeri][outerj + 2].setID(curr_ship);
+						player.board_[outeri][outerj + 3].setID(curr_ship);
+						player.board_[outeri][outerj + 4].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -358,6 +443,11 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj + 3].setOccupied();
 						isClicking = false;
 						box_used[1] = true;
+						player.ship_cells[1] = 4;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj + 1].setID(curr_ship);
+						player.board_[outeri][outerj + 2].setID(curr_ship);
+						player.board_[outeri][outerj + 3].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -374,6 +464,10 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj + 2].setOccupied();
 						isClicking = false;
 						box_used[2] = true;
+						player.ship_cells[2] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj + 1].setID(curr_ship);
+						player.board_[outeri][outerj + 2].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -390,6 +484,10 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj + 2].setOccupied();
 						isClicking = false;
 						box_used[3] = true;
+						player.ship_cells[3] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj + 1].setID(curr_ship);
+						player.board_[outeri][outerj + 2].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -404,6 +502,9 @@ void boardPlace(Board& player)
 						player.board_[outeri][outerj + 1].setOccupied();
 						isClicking = false;
 						box_used[4] = true;
+						player.ship_cells[4] = 2;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri][outerj + 1].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -416,9 +517,10 @@ void boardPlace(Board& player)
 		}
 
 		//facing left
-		if (cam_mousey >= yp - 0.1
-			&& cam_mousey <= yp + 0.1
-			&& cam_mousex <= xp - 0.1)
+		if (cam_mousey >= yp - 0.073
+			&& cam_mousey <= yp + 0.073
+			&& cam_mousex <= xp - 0.073
+			&& cam_mousex >= xp - 0.233)
 		{
 
 			switch (curr_ship)
@@ -437,6 +539,12 @@ void boardPlace(Board& player)
 						player.board_[outeri - 4][outerj].setOccupied();
 						isClicking = false;
 						box_used[0] = true;
+						player.ship_cells[0] = 5;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri - 1][outerj].setID(curr_ship);
+						player.board_[outeri - 2][outerj].setID(curr_ship);
+						player.board_[outeri - 3][outerj].setID(curr_ship);
+						player.board_[outeri - 4][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -455,6 +563,11 @@ void boardPlace(Board& player)
 						player.board_[outeri - 3][outerj].setOccupied();
 						isClicking = false;
 						box_used[1] = true;
+						player.ship_cells[1] = 4;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri - 1][outerj].setID(curr_ship);
+						player.board_[outeri - 2][outerj].setID(curr_ship);
+						player.board_[outeri - 3][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -471,6 +584,10 @@ void boardPlace(Board& player)
 						player.board_[outeri - 2][outerj].setOccupied();
 						isClicking = false;
 						box_used[2] = true;
+						player.ship_cells[2] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri - 1][outerj].setID(curr_ship);
+						player.board_[outeri - 2][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -487,6 +604,10 @@ void boardPlace(Board& player)
 						player.board_[outeri - 2][outerj].setOccupied();
 						isClicking = false;
 						box_used[3] = true;
+						player.ship_cells[3] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri - 1][outerj].setID(curr_ship);
+						player.board_[outeri - 2][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -501,6 +622,9 @@ void boardPlace(Board& player)
 						player.board_[outeri - 1][outerj].setOccupied();
 						isClicking = false;
 						box_used[4] = true;
+						player.ship_cells[4] = 2;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri - 1][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -513,9 +637,10 @@ void boardPlace(Board& player)
 		}
 
 		//facing right
-		if (cam_mousey >= yp - 0.1
-			&& cam_mousey <= yp + 0.1
-			&& cam_mousex >= xp + 0.1)
+		if (cam_mousey >= yp - 0.073
+			&& cam_mousey <= yp + 0.073
+			&& cam_mousex >= xp + 0.073
+			&& cam_mousex <= xp + 0.233)
 		{
 
 			switch (curr_ship)
@@ -534,6 +659,12 @@ void boardPlace(Board& player)
 						player.board_[outeri + 4][outerj].setOccupied();
 						isClicking = false;
 						box_used[0] = true;
+						player.ship_cells[0] = 5;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri + 1][outerj].setID(curr_ship);
+						player.board_[outeri + 2][outerj].setID(curr_ship);
+						player.board_[outeri + 3][outerj].setID(curr_ship);
+						player.board_[outeri + 4][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -552,6 +683,11 @@ void boardPlace(Board& player)
 						player.board_[outeri + 3][outerj].setOccupied();
 						isClicking = false;
 						box_used[1] = true;
+						player.ship_cells[1] = 4;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri + 1][outerj].setID(curr_ship);
+						player.board_[outeri + 2][outerj].setID(curr_ship);
+						player.board_[outeri + 3][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -568,6 +704,10 @@ void boardPlace(Board& player)
 						player.board_[outeri + 2][outerj].setOccupied();
 						isClicking = false;
 						box_used[2] = true;
+						player.ship_cells[2] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri + 1][outerj].setID(curr_ship);
+						player.board_[outeri + 2][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -584,6 +724,10 @@ void boardPlace(Board& player)
 						player.board_[outeri + 2][outerj].setOccupied();
 						isClicking = false;
 						box_used[3] = true;
+						player.ship_cells[3] = 3;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri + 1][outerj].setID(curr_ship);
+						player.board_[outeri + 2][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -598,6 +742,9 @@ void boardPlace(Board& player)
 						player.board_[outeri + 1][outerj].setOccupied();
 						isClicking = false;
 						box_used[4] = true;
+						player.ship_cells[4] = 2;
+						player.board_[outeri][outerj].setID(curr_ship);
+						player.board_[outeri + 1][outerj].setID(curr_ship);
 						curr_ship = -1;
 						ships_placed++;
 						return;
@@ -638,6 +785,67 @@ void boardHover(Board& player)
 		}
 	}
 }
+
+
+//boardFire()
+//Fires a shot at a cell on the board, determining if there is a hit or miss.
+void boardFire(Board& player, Board& opponent)
+{
+
+	for (int i = 0; i < opponent.getSize(); i++)
+	{
+		for (int j = 0; j < opponent.getSize(); j++)
+		{
+
+			if (player.board_[i][j].getSquareHover() == true)
+			{
+				if (player.board_[i][j].isHit() == false && player.board_[i][j].isMiss() == false)
+				{
+
+					if (opponent.board_[i][j].isOccupied() == false)
+					{
+						//Misses
+						player.board_[i][j].setMiss();
+						has_fired = true;
+					}
+					else
+					{
+						//Hits
+
+						//sets cells/ships to unoccupied or destroyed
+						shipCheck(opponent, opponent.board_[i][j].getID());
+
+						///////////////////////////////////////////////
+						//change this section likely if sprites are used.
+						if (opponent.board_[i][j].isHead())
+						{
+							opponent.board_[i][j].removeHead();
+						}
+						else
+						{
+							opponent.board_[i][j].removeOccupied();
+						}
+						opponent.board_[i][j].setMiss();
+						////////////////////////////////////////////
+
+						player.board_[i][j].setHit();
+
+						has_fired = true;
+					}
+				}
+
+
+
+			}
+			
+
+		}
+	}
+
+}
+
+
+
 
 
 #endif

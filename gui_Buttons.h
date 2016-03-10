@@ -1,4 +1,11 @@
 
+/*
+Tristan Craddick
+Button Gui  Header
+
+For CS 372 Battleship Game
+*/
+
 #ifndef GUI_BUTTONS_H_INCLUDED
 #define GUI_BUTTONS_H_INCLUDED
 
@@ -20,6 +27,10 @@ void drawCirc()
 	glEnd();
 }
 
+
+
+
+
 //finishClick()
 //detects whether the player has clicked on the finish button
 void finishClick()
@@ -34,6 +45,17 @@ void finishClick()
 		finishcol[0] = finish_clicked[0];
 		finishcol[1] = finish_clicked[1];
 		finishcol[2] = finish_clicked[2];
+
+		if (game_start == true)
+		{
+			winCheck();
+		}
+		else
+		{
+			game_pause = true;
+			glutDisplayFunc(pauseScreen);
+		}
+		//winCheck(); //use to test winning redisplay
 
 		for (int i = 0; i < 5; i++)
 		{

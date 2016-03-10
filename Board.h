@@ -1,11 +1,12 @@
 // Board.h  
-// Tristan J Craddick and Arsh Chauhan
+// Arsh Chauhan
 // For CS 372 Battleship Game
 
 #ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
 
 #include "Cell.h"
+
 #include <vector>
 using std::vector;
 #include <cstddef>
@@ -22,6 +23,7 @@ public:
 	int getSize();
 	void setSize(int size);
 
+
 /*****************functions to act on our board's cells********************/
 	int totalCells();
 	void setHead(int,int);
@@ -29,12 +31,15 @@ public:
 	bool isHead(int,int);
 
 	vector<vector<Cell>> board_; //Collection of cells 
+	int ship_cells[5]; //the number of cells remaining for each ship
 	
  private:
 	int boardSize_;
 	int totalCells_;
 	bool squareOccupied_;
 	bool isPrimary_;
+
+
 	
 
 public:

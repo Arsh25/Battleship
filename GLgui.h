@@ -1,4 +1,10 @@
-// For CS 372 Battleship Game
+/*
+Tristan Craddick
+Core Gui  Header
+
+For CS 372 Battleship Game
+*/
+
 
 #ifndef GLgui_h_included
 #define GLgui_h_included
@@ -22,6 +28,7 @@ using std::exit;
 // Other includes
 #include "lib381/bitmapprinter.h"
 #include "Board.h"
+
 #include "gui_Board.h"
 #include "gui_Globals.h"
 #include "gui_Buttons.h"
@@ -55,6 +62,7 @@ void myDisplay()
 	glClear(GL_COLOR_BUFFER_BIT);
 	BitmapPrinter p(0.0, 0.0, 0.1);
 	BitmapPrinter player(0.0, 0.0, 0.1);
+	BitmapPrinter button(0.0, 0.0, 0.1);
 
 	glLoadIdentity();
 
@@ -62,26 +70,28 @@ void myDisplay()
 
 	glColor3d(0.4, 0.4, 0.4); //color for the cell borders
 
-	//Large grid on the right
-	if (p1turn == true)
-	{
-		glPushMatrix();
-		glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
-		glScaled(0.8, 0.8, 0.0);
-		drawLargeGrid(player1Home);
-		glPopMatrix();
-	}
-	else
-	{
-		glPushMatrix();
-		glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
-		glScaled(0.8, 0.8, 0.0);
-		drawLargeGrid(player2Home);
-		glPopMatrix();
-	}
+
 
 	if (game_start == false)
 	{
+		//Large grid on the right
+		if (p1turn == true)
+		{
+			glPushMatrix();
+			glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawLargeGrid(player1Home);
+			glPopMatrix();
+		}
+		else
+		{
+			glPushMatrix();
+			glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawLargeGrid(player2Home);
+			glPopMatrix();
+		}
+
 		//ship buttons
 		glPushMatrix();
 		glTranslated(-1.0, -0.15, 0.0);
@@ -104,6 +114,25 @@ void myDisplay()
 	}
 	else //game_start == true, so secondary board is displayed.
 	{
+		//Large grid on the right
+		if (p1turn == true)
+		{
+			glPushMatrix();
+			glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawLargeGrid(player1Target);
+			glPopMatrix();
+		}
+		else
+		{
+			glPushMatrix();
+			glTranslated(l_gridstart_x, l_gridstart_y, 0.0);
+			glScaled(0.8, 0.8, 0.0);
+			drawLargeGrid(player2Target);
+			glPopMatrix();
+		}
+
+
 		if (p1turn == true)
 		{
 			glPushMatrix();
@@ -142,12 +171,12 @@ void myDisplay()
 
 		glScaled(0.75, 0.75, 0.0); //used for 800x600 aspect ratio 
 
-		p.print("Finished!");
+		button.print("Finished!");
 		glPopMatrix();
 	}
 
 
-
+	
 
 
 
@@ -163,7 +192,8 @@ void myDisplay()
 		p.print("Welcome to Battleship");
 		p.print("Please use the mouse to place ships");
 		p.print("on the board by clicking a grid square,");
-		p.print("then choosing a direction. Click the");
+		p.print("then choosing a direction by clicking");
+		p.print("the next square over. Click the");
 		p.print("'finished' button when you are done to ");
 		p.print("pass it to the next player.");
 		p.print("");
@@ -192,6 +222,24 @@ void myDisplay()
 		p.print("Click on a grid cell to fire a shot.");
 		p.print("The first to sink all of the opponent's");
 		p.print("ships is the winner!");
+
+		if (p1turn == true)
+		{
+			p.print("AC: " + std::to_string(player1Home.ship_cells[0]));
+			p.print("Bat: " + std::to_string(player1Home.ship_cells[1]));
+			p.print("Des: " + std::to_string(player1Home.ship_cells[2]));
+			p.print("Sub: " + std::to_string(player1Home.ship_cells[3]));
+			p.print("PB: " + std::to_string(player1Home.ship_cells[4]));
+		}
+		else
+		{
+			p.print("AC: " + std::to_string(player2Home.ship_cells[0]));
+			p.print("Bat: " + std::to_string(player2Home.ship_cells[1]));
+			p.print("Des: " + std::to_string(player2Home.ship_cells[2]));
+			p.print("Sub: " + std::to_string(player2Home.ship_cells[3]));
+			p.print("PB: " + std::to_string(player2Home.ship_cells[4]));
+		}
+
 	}
 
 
@@ -316,6 +364,13 @@ void myKeyboard(unsigned char key, int x, int y)
 	case ESCKEY:  // Escape: quit
 		exit(0);
 		break;
+	case ' ':
+		if (game_pause == true)
+		{
+			game_pause = false;
+			glutDisplayFunc(myDisplay);
+		}
+		break;
 
 	}
 	glutPostRedisplay();
@@ -377,7 +432,14 @@ void myMouse(int button, int state, int x, int y)
 		}
 		else //game has started, and targeting begins.
 		{
-
+			if (p1turn == true)
+			{
+				boardFire(player1Target,player2Home);
+			}
+			else
+			{
+				boardFire(player2Target, player1Home);
+			}
 		}
 
 
@@ -452,15 +514,29 @@ void myPassiveMotion(int x, int y)
 		finishcol[2] = finish_base[2];
 	}
 
-
-	if (p1turn == true)
+	if (game_start == false)
 	{
-		boardHover(player1Home);
+		if (p1turn == true)
+		{
+			boardHover(player1Home);
+		}
+		else
+		{
+			boardHover(player2Home);
+		}
 	}
 	else
 	{
-		boardHover(player2Home);
+		if (p1turn == true)
+		{
+			boardHover(player1Target);
+		}
+		else
+		{
+			boardHover(player2Target);
+		}
 	}
+
 
 
 
@@ -518,7 +594,76 @@ void init()
 	showdisplay = true;
 }
 
+void pauseScreen()
+{
+	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
+	BitmapPrinter player(-0.5, 0.0, 0.1);
+
+	glPushMatrix();
+	player.print("Please pass to the next player");
+	player.print("press space to continue");
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glutSwapBuffers();
+}
+
+void winDisplay()
+{ 
+	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	BitmapPrinter player(-0.2, 0.0, 0.1);
+
+	glPushMatrix();
+	player.print(winner + " wins!");
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glutSwapBuffers();
+}
+
+void winCheck()
+{
+		if (p1turn)
+		{
+			if (player2Home.ship_cells[0] == 0
+				&& player2Home.ship_cells[1] == 0
+				&& player2Home.ship_cells[2] == 0
+				&& player2Home.ship_cells[3] == 0
+				&& player2Home.ship_cells[4] == 0)
+			{
+				winner = "Player 1";
+				glutDisplayFunc(winDisplay);
+			}
+			else
+			{
+				game_pause = true;
+				glutDisplayFunc(pauseScreen);
+			}
+
+		}
+		else
+		{
+			if (player1Home.ship_cells[0] == 0
+				&& player1Home.ship_cells[1] == 0
+				&& player1Home.ship_cells[2] == 0
+				&& player1Home.ship_cells[3] == 0
+				&& player1Home.ship_cells[4] == 0)
+			{
+				winner = "Player 2";
+				glutDisplayFunc(winDisplay);
+			}
+			else
+			{
+				game_pause = true;
+				glutDisplayFunc(pauseScreen);
+			}
+		}
+
+}
 
 
 
