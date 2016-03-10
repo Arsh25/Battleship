@@ -57,7 +57,7 @@ private:
 public:
 	//Default ctor
 	//Cell is neither ccupied nor a head by default 
-	Cell():isHead_(false),isOccupied_(false),squareHover_(false),isHit_(false),isMiss_(false){};
+	Cell():isHead_(false),isOccupied_(false),isHit_(false),isMiss_(false),squareHover_(false){};
 };
 
 
