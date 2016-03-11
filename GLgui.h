@@ -386,6 +386,39 @@ void myKeyboard(unsigned char key, int x, int y)
 			game_pause = false;
 			glutDisplayFunc(myDisplay);
 		}
+		if (ships_placed == 5 || has_fired == true)
+		{
+			if (game_start == true)
+			{
+				winCheck();
+			}
+			else
+			{
+				game_pause = true;
+				glutDisplayFunc(pauseScreen);
+			}
+			//winCheck(); //use to test winning redisplay
+
+			for (int i = 0; i < 5; i++)
+			{
+				box_used[i] = false;
+
+			}
+
+			if (p1turn == true)
+			{
+				p1turn = false;
+				p2turn = true;
+			}
+			else
+			{
+				p1turn = true;
+				p2turn = false;
+			}
+			turn_count++;
+			ships_placed = 0;
+			has_fired = false;
+		}
 		break;
 
 	}
