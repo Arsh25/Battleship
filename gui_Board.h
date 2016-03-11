@@ -126,20 +126,20 @@ void drawLargeGrid(Board& player)
 				drawSquare();
 			}
 
-			
+
 			//These alternate x and y values are used to take into accound linethickness
 			// for the boundaries of the squares.
 			float ax = i*0.16;
 			float ay = -(j*0.16);
 
-			float leftBound = ax - 0.075 + l_gridstart_x ;
-			float rightBound = ax + 0.075 + l_gridstart_x ;
+			float leftBound = ax - 0.075 + l_gridstart_x;
+			float rightBound = ax + 0.075 + l_gridstart_x;
 
 			float bottomBound = ay - 0.075 + l_gridstart_y;
-			float topBound = ay + 0.075 + l_gridstart_y ;
+			float topBound = ay + 0.075 + l_gridstart_y;
 
 
-			player.board_[i][j].setBounds(topBound,bottomBound,leftBound,rightBound); 
+			player.board_[i][j].setBounds(topBound, bottomBound, leftBound, rightBound);
 
 			if (player.board_[i][j].isHead())
 			{
@@ -157,11 +157,16 @@ void drawLargeGrid(Board& player)
 				drawSquare();
 
 			}
-			if (player.board_[i][j].isHit() == true)
+			if (player.board_[i][j].isHit() == true && player.board_[i][j].isTarSunk() == false)
 			{
 				glColor3d(0.3, 0.7, 0.3); //green
 				drawSquare();
 
+			}
+			if (player.board_[i][j].isTarSunk() == true)
+			{
+				glColor3d(0.3, 0.3, 0.8);
+				drawSquare();
 			}
 			
 			
@@ -218,11 +223,16 @@ void drawSmallBoard(Board& player)
 				glColor3d(0.3, 0.7, 0.7); //light blue
 				drawSquare();
 			}
-			if (player.board_[i][j].isMiss() == true)
+			if (player.board_[i][j].isMiss() == true && player.board_[i][j].isSunk() != true)
 			{
-				glColor3d(0.7, 0.3, 0.3); //red
+				glColor3d(0.9, 0.3, 0.3); //red
 				drawSquare();
 
+			}
+			if (player.board_[i][j].isSunk() == true)
+			{
+				glColor3d(0.3, 0.1, 0.1);
+				drawSquare();
 			}
 
 

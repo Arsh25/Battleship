@@ -147,6 +147,7 @@ void drawSmallBoard(Board& player);
 void boardPlace(Board& player);
 void boardHover(Board& player);
 void boardFire(Board& player, Board& opponent);
+void sunkCheck(Board& player, Board& opponent);
 
 //Button-based functions
 void drawCirc();

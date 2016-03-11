@@ -33,7 +33,7 @@ bool Cell::isHead()
 /*
 isHit
 Pre: None
-Post: Returns true if cell is the head of ship
+Post: Returns true if cell is a 'hit'
 */
 bool Cell::isHit()
 {
@@ -43,11 +43,31 @@ bool Cell::isHit()
 /*
 isMiss
 Pre: None
-Post: Returns true if cell is the head of ship
+Post: Returns true if cell is a 'miss'
 */
 bool Cell::isMiss()
 {
 	return isMiss_;
+}
+
+/*
+isSunk
+Pre: None
+Post: Returns true if cell is part of a sunken ship
+*/
+bool Cell::isSunk()
+{
+	return isSunk_;
+}
+
+/*
+isTarSunk
+Pre: None
+Post: Returns true if target cell is of a sunken ship.
+*/
+bool Cell::isTarSunk()
+{
+	return isTarSunk_;
 }
 
 /*
@@ -73,7 +93,7 @@ void Cell::setHead()
 /*
 setHit
 Pre: None
-Post: Cell is now a head of some ship
+Post: Cell is now a 'hit'
 */
 void Cell::setHit()
 {
@@ -83,11 +103,31 @@ void Cell::setHit()
 /*
 setMiss
 Pre: None
-Post: Cell is now a head of some ship
+Post: Cell is now a 'miss'
 */
 void Cell::setMiss()
 {
 	isMiss_ = true;
+}
+
+/*
+setSunk
+Pre: None
+Post: Cell is now a part of a sunken ship
+*/
+void Cell::setSunk()
+{
+	isSunk_ = true;
+}
+
+/*
+setSunk
+Pre: None
+Post: Cell is now a part of a sunken ship.
+*/
+void Cell::setTarSunk()
+{
+	isTarSunk_ = true;
 }
 
 
@@ -101,7 +141,6 @@ void Cell::removeHead()
 {
 	isHead_ = false;
 	isOccupied_ = false;
-	ship_ID = -1;
 }
 
 /*
@@ -112,7 +151,6 @@ Post: Cell is no longer occupied
 void Cell::removeOccupied()
 {
 	isOccupied_ = false;
-	ship_ID = -1;
 }
 
 /*

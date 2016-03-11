@@ -226,31 +226,27 @@ void myDisplay()
 		text.print("Click on a grid cell to fire a shot.");
 		text.print("The first to sink all of the opponent's");
 		text.print("ships is the winner!");
+		text.print("");
+		text.print("Ship Cells Remaining:");
 
 		if (p1turn == true)
 		{
-			text.print("AC: " + std::to_string(player1Home.ship_cells[0]));
-			text.print("Bat: " + std::to_string(player1Home.ship_cells[1]));
-			text.print("Des: " + std::to_string(player1Home.ship_cells[2]));
-			text.print("Sub: " + std::to_string(player1Home.ship_cells[3]));
-			text.print("PB: " + std::to_string(player1Home.ship_cells[4]));
+			text.print("Aircraft Carrier: " + std::to_string(player1Home.ship_cells[0]));
+			text.print("Battleship: " + std::to_string(player1Home.ship_cells[1]));
+			text.print("Submarine: " + std::to_string(player1Home.ship_cells[2]));
+			text.print("Destroyer: " + std::to_string(player1Home.ship_cells[3]));
+			text.print("Patrol Boat: " + std::to_string(player1Home.ship_cells[4]));
 		}
 		else
 		{
-			text.print("AC: " + std::to_string(player2Home.ship_cells[0]));
-			text.print("Bat: " + std::to_string(player2Home.ship_cells[1]));
-			text.print("Des: " + std::to_string(player2Home.ship_cells[2]));
-			text.print("Sub: " + std::to_string(player2Home.ship_cells[3]));
-			text.print("PB: " + std::to_string(player2Home.ship_cells[4]));
+			text.print("Aircraft Carrier: " + std::to_string(player2Home.ship_cells[0]));
+			text.print("Battleship: " + std::to_string(player2Home.ship_cells[1]));
+			text.print("Submarine: " + std::to_string(player2Home.ship_cells[2]));
+			text.print("Destroyer: " + std::to_string(player2Home.ship_cells[3]));
+			text.print("Patrol Boat: " + std::to_string(player2Home.ship_cells[4]));
 		}
 
 	}
-
-
-
-	text.print("");
-	text.print("mx: " + std::to_string(cam_mousex));
-	text.print("my: " + std::to_string(cam_mousey));
 
 	glPopMatrix();                // Restore prev projection
 
@@ -468,10 +464,12 @@ void myMouse(int button, int state, int x, int y)
 				if (p1turn == true)
 				{
 					boardFire(player1Target, player2Home);
+					sunkCheck(player1Target, player2Home);
 				}
 				else
 				{
 					boardFire(player2Target, player1Home);
+					sunkCheck(player2Target, player1Home);
 				}
 			}
 		}
@@ -728,6 +726,64 @@ void winCheck()
 			}
 		}
 
+}
+
+/*
+Pre: None
+Post: checks to see if ship is fully sunk
+*/
+void sunkCheck(Board& player,Board& opponent)
+{
+
+
+	for (int i = 0; i < player.getSize(); i++)
+	{
+		for (int j = 0; j < player.getSize(); j++)
+		{
+			if (opponent.ship_cells[0] == 0)
+			{
+				if (opponent.board_[i][j].getID() == 0)
+				{
+					opponent.board_[i][j].setSunk();
+					player.board_[i][j].setTarSunk();
+				}
+			}
+			if (opponent.ship_cells[1] == 0)
+			{
+				if (opponent.board_[i][j].getID() == 1)
+				{
+					opponent.board_[i][j].setSunk();
+					player.board_[i][j].setTarSunk();
+				}
+			}
+			if (opponent.ship_cells[2] == 0)
+			{
+				if (opponent.board_[i][j].getID() == 2)
+				{
+					opponent.board_[i][j].setSunk();
+					player.board_[i][j].setTarSunk();
+				}
+			}
+			if (opponent.ship_cells[3] == 0)
+			{
+				if (opponent.board_[i][j].getID() == 3)
+				{
+					opponent.board_[i][j].setSunk();
+					player.board_[i][j].setTarSunk();
+				}
+			}
+			if (opponent.ship_cells[4] == 0)
+			{
+				if (opponent.board_[i][j].getID() == 4)
+				{
+					opponent.board_[i][j].setSunk();
+					player.board_[i][j].setTarSunk();
+				}
+			}
+
+
+		}
+	}
 }
 
 
