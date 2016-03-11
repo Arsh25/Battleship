@@ -1,5 +1,5 @@
 /*
-	Arsh Chauhan
+	Arsh Chauhan and Tristan Craddick
 	02/24/2016
 	Source for header Board.h
 */

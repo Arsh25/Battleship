@@ -1,5 +1,7 @@
 // Battleship_test.cpp
-//
+// Arsh Chauhan and Tristan Craddick
+// 02/23/2016
+// Last Edited: 03/10/2016
 // For CS 372 Spring 2016
 // Unit tests for Battleship Project
 // Uses the "Catch" C++ Unit-Testing Framework
