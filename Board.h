@@ -1,5 +1,7 @@
 // Board.h  
-// Arsh Chauhan
+// Arsh Chauhan and Tristan Craddick
+// 02/17/2016
+// Last Edited: 03/10/2016
 // For CS 372 Battleship Game
 
 #ifndef BOARD_H_INCLUDED

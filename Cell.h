@@ -1,6 +1,8 @@
 /*
 Arsh Chauhan and Tristan Craddick
-Cell Header
+02/24/2016
+Last Edited: 03/10/2016
+Header for class Cell
 */
 
 
