@@ -1,7 +1,8 @@
 /*
-Tristan Craddick
-Global Gui  Header
-
+Tristan Craddick and Arsh Chauhan
+Gui Header for Globals
+02/19/16
+Last Updated: 03/10/16
 For CS 372 Battleship Game
 */
 

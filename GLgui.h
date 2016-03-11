@@ -1,7 +1,8 @@
 /*
-Tristan Craddick
+Tristan Craddick and Arsh Chauhan
 Core Gui  Header
-
+02/19/16
+Last Updated: 03/10/16
 For CS 372 Battleship Game
 */
 
